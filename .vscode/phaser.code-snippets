@@ -1,15 +1,16 @@
 {
   "Make Scene Class": {
+    "scope": "typescript",
     "prefix": "@scene",
     "body": [
       "import Phaser from 'phaser';\n",
       "export class $TM_FILENAME_BASE extends Phaser.Scene {",
       "\tconstructor() {",
-      "\t\tsuper({ key: 'sc:${TM_FILENAME_BASE/(.*)/${1:/downcase}/}' });",
+      "\t\tsuper({ key: SCENE_KEY.${TM_FILENAME_BASE/(.*)/${1:/upcase}/} });",
       "\t}",
       "",
       "\tpreload() {",
-      "\t\tthis.load.image('im:', '');",
+      "\t\t// this.load.image(IMAGE_KEY, '');",
       "\t}",
       "\tcreate() {\n\n\t}",
       "\tupdate() {\n\n\t}",
