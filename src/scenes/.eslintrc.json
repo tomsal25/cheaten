@@ -1,0 +1,11 @@
+{
+  "rules": {
+    "@typescript-eslint/explicit-member-accessibility": [
+      "warn",
+      {
+        "ignoredMethodNames": ["init", "preload", "create", "update"],
+        "overrides": { "constructors": "no-public" }
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "Make Scene Class": {
+    "prefix": "@scene",
+    "body": [
+      "import Phaser from 'phaser';\n",
+      "export class $TM_FILENAME_BASE extends Phaser.Scene {",
+      "\tconstructor() {",
+      "\t\tsuper({ key: 'sc:${TM_FILENAME_BASE/(.*)/${1:/downcase}/}' });",
+      "\t}",
+      "",
+      "\tpreload() {",
+      "\t\tthis.load.image('im:', '');",
+      "\t}",
+      "\tcreate() {\n\n\t}",
+      "\tupdate() {\n\n\t}",
+      "}"
+    ],
+    "description": "Make Scene Class(Phaser)"
+  }
+}
