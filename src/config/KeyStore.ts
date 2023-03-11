@@ -9,7 +9,14 @@ export const SCENE_KEY = {
 } as const;
 
 export const IMAGE_KEY = {
-  TITLE: `${IMAGE_PREFIX}title`,
+  SKY: `${IMAGE_PREFIX}0`,
+  LOGO: `${IMAGE_PREFIX}1`,
+  RED: `${IMAGE_PREFIX}2`,
+  SKY_BG: `${IMAGE_PREFIX}3`,
+  WIZBALL: `${IMAGE_PREFIX}4`,
+  SHIP: `${IMAGE_PREFIX}5`,
+  BULLET: `${IMAGE_PREFIX}6`,
+  ENEMY: `${IMAGE_PREFIX}7`,
 } as const;
 
 export type SCENE_KEY_LIST = (typeof SCENE_KEY)[keyof typeof SCENE_KEY];

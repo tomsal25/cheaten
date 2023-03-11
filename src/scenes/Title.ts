@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from '../config/Consts';
-import { SCENE_KEY } from '../config/KeyStore';
-import { currentSceneKey } from '../store/Store';
+import { IMAGE_KEY, SCENE_KEY } from '../config/KeyStore';
+import { g_currentSceneKey } from '../store/Store';
 
 export class Title extends Phaser.Scene {
   private isReady = false;
@@ -12,7 +12,15 @@ export class Title extends Phaser.Scene {
   }
 
   preload() {
-    //
+    this.load.setBaseURL('https://labs.phaser.io');
+    this.load.image(IMAGE_KEY.SKY, 'assets/skies/space3.png');
+    this.load.image(IMAGE_KEY.LOGO, 'assets/sprites/phaser3-logo.png');
+    this.load.image(IMAGE_KEY.RED, 'assets/particles/red.png');
+    this.load.image(IMAGE_KEY.SKY_BG, 'assets/skies/gradient13.png');
+    this.load.image(IMAGE_KEY.WIZBALL, 'assets/sprites/wizball.png');
+    this.load.image(IMAGE_KEY.SHIP, 'assets/sprites/ship.png');
+    this.load.image(IMAGE_KEY.BULLET, 'assets/sprites/bullet.png');
+    this.load.image(IMAGE_KEY.ENEMY, 'assets/particles/elec1.png');
   }
   create() {
     this.physics.world.on('pause', () => {
@@ -46,7 +54,7 @@ export class Title extends Phaser.Scene {
       if (n == 1) this.isReady = true;
     });
 
-    currentSceneKey.set(SCENE_KEY.TITLE);
+    g_currentSceneKey.set(SCENE_KEY.TITLE);
   }
   update() {
     //

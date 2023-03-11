@@ -1,17 +1,10 @@
-import Phaser from 'phaser';
 import { FunctionComponent } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
 import './app.css';
 import imgsrc from './assets/preact.svg';
 import { GameManager } from './components/GameManager';
-import { GAME_CONFIG, GAME_ID } from './config/Consts';
-import { Ex } from './scenes/Ex';
-import { Stage1 } from './scenes/Stage1';
-import { Stage2 } from './scenes/Stage2';
-import { Title } from './scenes/Title';
-
-const scene = [Title, Stage1, Ex, Stage2];
+import { GAME_ID } from './config/Consts';
 
 const useScreenSize = () => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -44,24 +37,8 @@ const StartButton: FunctionComponent<{ setStart: () => void }> = ({
 };
 
 export const App = () => {
-  const [game, setGame] = useState<Phaser.Game | null>(null);
-  if (import.meta.env.DEV) {
-    // eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error, @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    window.game = game;
-  }
   const [isStart, setIsStart] = useState(false);
-
   const { width, height } = useScreenSize();
-
-  useEffect(() => {
-    if (!isStart) return;
-    // setGame(_g => _g ?? new Phaser.Game({ ...GAME_CONFIG, scene }));
-    setGame(_g => {
-      const gg = _g ?? new Phaser.Game({ ...GAME_CONFIG, scene });
-      return gg;
-    });
-  }, [isStart]);
 
   return (
     <>
@@ -74,8 +51,8 @@ export const App = () => {
           backgroundImage: `url('${imgsrc}')`,
         }}
       />
-      {game ? (
-        <GameManager game={game} />
+      {isStart ? (
+        <GameManager />
       ) : (
         <StartButton setStart={() => setIsStart(true)} />
       )}

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
-import { SCENE_KEY } from '../config/KeyStore';
-import { currentSceneKey } from '../store/Store';
+import { IMAGE_KEY, SCENE_KEY } from '../../config/KeyStore';
+import { g_currentSceneKey } from '../../store/Store';
 
 export class Stage1 extends Phaser.Scene {
   private ball1?: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
@@ -11,20 +11,14 @@ export class Stage1 extends Phaser.Scene {
   }
 
   preload() {
-    this.load.setBaseURL('https://labs.phaser.io');
-
-    this.load.image('sky1', 'assets/skies/gradient13.png');
-    this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-    this.load.image('red', 'assets/particles/red.png');
-
-    this.load.image('wizball', 'assets/sprites/wizball.png');
+    //
   }
 
   create() {
-    this.add.image(400, 500, 'sky1');
+    this.add.image(400, 500, IMAGE_KEY.SKY_BG);
     this.add.text(100, 100, 'Stage 1').setFontSize(64).setColor('#ff0');
 
-    const particles = this.add.particles('red');
+    const particles = this.add.particles(IMAGE_KEY.RED);
 
     const emitter = particles.createEmitter({
       speed: 100,
@@ -33,7 +27,7 @@ export class Stage1 extends Phaser.Scene {
     });
 
     const logo = this.physics.add
-      .image(400, 100, 'logo')
+      .image(400, 100, IMAGE_KEY.LOGO)
       .setVelocity(100, 200)
       .setBounce(1, 1)
       .setCollideWorldBounds(true)
@@ -41,7 +35,7 @@ export class Stage1 extends Phaser.Scene {
       .once('pointerdown', () => this.scene.start(SCENE_KEY.EX));
 
     const group = this.physics.add.group({
-      key: 'wizball',
+      key: IMAGE_KEY.WIZBALL,
       'setXY.stepX': 2,
       'setXY.stepY': 4,
       quantity: 150,
@@ -77,8 +71,8 @@ export class Stage1 extends Phaser.Scene {
       }
     });
 
-    this.ball1 = this.physics.add.image(100, 240, 'wizball');
-    this.ball2 = this.physics.add.image(700, 240, 'wizball');
+    this.ball1 = this.physics.add.image(100, 240, IMAGE_KEY.WIZBALL);
+    this.ball2 = this.physics.add.image(700, 240, IMAGE_KEY.WIZBALL);
     const rad = this.ball1.height / 3;
     this.ball1
       .setCircle(rad, this.ball1.width / 2 - rad, this.ball1.height / 2 - rad)
@@ -99,7 +93,7 @@ export class Stage1 extends Phaser.Scene {
     this.physics.add.collider(this.ball1, this.ball2);
     this.physics.add.collider(this.ball1, group, this.handler);
 
-    currentSceneKey.set(SCENE_KEY.STAGE1);
+    g_currentSceneKey.set(SCENE_KEY.STAGE1);
   }
 
   update() {
