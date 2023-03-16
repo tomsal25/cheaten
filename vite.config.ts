@@ -5,10 +5,11 @@ import { defineConfig, PluginOption } from 'vite';
 export default defineConfig({
   plugins: [
     preact(),
-    // disable hmr to apply game changes
     {
-      handleHotUpdate({ server }) {
-        server.ws.send({ type: 'full-reload' });
+      handleHotUpdate({ server, modules }) {
+        // disable hmr in scene folder
+        if (/\/src\/scenes/.test(modules[0]?.url))
+          server.ws.send({ type: 'full-reload' });
       },
     } as PluginOption,
   ],
