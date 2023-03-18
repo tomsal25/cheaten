@@ -15,9 +15,9 @@
       <p>JavaScriptを有効にしてください。</p>
     </noscript>
     <div id="app">
-      <div style="font-size: 50px; position: sticky">
+      <div id="_beforeLoading" style="font-size: 50px; position: sticky">
         <script>
-          document.write('loading...');
+          document.getElementById('_beforeLoading').textContent = 'Loading...';
         </script>
       </div>
     </div>
