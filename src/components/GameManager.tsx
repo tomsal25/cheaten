@@ -5,6 +5,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { useStore } from '@nanostores/preact';
 
 import { GAME_CONFIG } from '../config/Consts';
+import { DEBUG_ASSIGN_GAME_AS_GLOBAL } from '../config/Debug';
 import { sceneList } from '../scenes';
 import { g_count, g_currentSceneKey, g_isPlaying } from '../store/Store';
 import { CodeEditor } from './CodeEditor';
@@ -29,9 +30,8 @@ export const GameManager = () => {
 
   useEffect(() => {
     const _game = new Phaser.Game({ ...GAME_CONFIG, scene: sceneList });
-    if (import.meta.env.DEV) {
-      // eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error, @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+    if (DEBUG_ASSIGN_GAME_AS_GLOBAL) {
+      // @ts-expect-error 2339
       window.game = _game;
     }
 
