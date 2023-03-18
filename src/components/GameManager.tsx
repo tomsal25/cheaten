@@ -7,8 +7,18 @@ import imgsrc from '../assets/preact.svg';
 import { GAME_CONFIG, GAME_ID } from '../config/Consts';
 import { DEBUG_ASSIGN_GAME_AS_GLOBAL } from '../config/Debug';
 import { sceneList } from '../scenes';
-import { g_count, g_currentSceneKey, g_isPlaying } from '../store/Store';
+import {
+  g_count,
+  g_currentSceneKey,
+  g_currentScreen,
+  g_isPlaying,
+  g_naviState,
+  g_nextText,
+  stepTimeline,
+} from '../store/Store';
 import { CodeEditor } from './CodeEditor';
+import { DialogWindow } from './DialogWindow';
+import { NavigationRobot } from './NavigationRobot';
 
 const useScreenSize = () => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -55,6 +65,55 @@ const Buttons = ({ text }: { text: string }) => {
       <Count />
     </>
   );
+};
+
+const Navigator = ({ zIndex }: { zIndex: number }) => {
+  const [isStartNavi, setIsStartNavi] = useState(false);
+  const naviState = useStore(g_naviState);
+
+  const Dialog = () => {
+    const [isFinishedText, setIsFinishedText] = useState(false);
+    const nextText = useStore(g_nextText);
+
+    // check if finished reading
+    useEffect(() => {
+      if (naviState == 2 && isFinishedText) {
+        setIsFinishedText(false);
+        stepTimeline();
+      }
+    }, [isFinishedText]);
+
+    return !isFinishedText && nextText ? (
+      <DialogWindow
+        name="Robot"
+        text={nextText}
+        setFinished={() => setIsFinishedText(true)}
+        style={{ zIndex }}
+      />
+    ) : null;
+  };
+
+  const top = '65vw';
+  const left = '50vh';
+
+  useEffect(() => {
+    // on starting navi
+    if (naviState == 1) {
+      setIsStartNavi(true);
+      stepTimeline();
+    }
+    // on ending navi
+    else if (naviState == 3) {
+      window.setTimeout(() => stepTimeline());
+    }
+  }, [naviState]);
+
+  return naviState != 3 ? (
+    <>
+      {isStartNavi ? <Dialog /> : null}
+      <NavigationRobot top={top} left={left} style={{ zIndex }} />
+    </>
+  ) : null;
 };
 
 const Editor = ({
@@ -130,6 +189,7 @@ export const GameManager = () => {
           backgroundImage: `url('${imgsrc}')`,
         }}
       >
+        <Navigator zIndex={1} />
         <Editor text={text} setText={setText} />
         {/* canvas will be inserted here */}
       </div>
