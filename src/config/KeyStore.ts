@@ -20,4 +20,5 @@ export const IMAGE_KEY = {
 } as const;
 
 export type SCENE_KEY_LIST = (typeof SCENE_KEY)[keyof typeof SCENE_KEY];
+export type STAGE_KEY_LIST = Exclude<SCENE_KEY_LIST, typeof SCENE_KEY.TITLE>;
 export type IMAGE_KEY_LIST = (typeof IMAGE_KEY)[keyof typeof IMAGE_KEY];
