@@ -1,11 +1,16 @@
-import { FunctionComponent, JSX } from 'preact/compat';
+import { CSSProperties, JSX } from 'preact/compat';
 
 import { isPositiveInt } from '../util/Validate';
 
-export const CodeEditor: FunctionComponent<{
+export const CodeEditor = ({
+  text,
+  setText,
+  style,
+}: {
   text: string;
   setText: (str: string) => void;
-}> = ({ text, setText }) => {
+  style?: CSSProperties;
+}) => {
   const validator = isPositiveInt;
 
   const typeHandler: JSX.GenericEventHandler<HTMLInputElement> = e => {
@@ -25,9 +30,10 @@ export const CodeEditor: FunctionComponent<{
       <div
         id="code-editor"
         style={{
-          backgroundColor: '#2d333879',
           letterSpacing: '0.5px',
-          // transform: 'translate(0px,-300px)',
+          backgroundColor: '#2d3338',
+          userSelect: 'text',
+          ...style,
         }}
       >
         <span style={{ color: 'yellow' }}>const</span>
