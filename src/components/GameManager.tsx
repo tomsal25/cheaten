@@ -28,10 +28,8 @@ const useScreenSize = () => {
     // FIXME: check delay time
     const setLazySize = () => {
       window.setTimeout(() => {
-        // setWidth(document.documentElement.clientWidth);
-        // setHeight(document.documentElement.clientHeight);
-        setWidth(window.innerWidth);
-        setHeight(window.innerHeight);
+        setWidth(document.documentElement.clientWidth);
+        setHeight(document.documentElement.clientHeight);
       }, 100);
     };
     window.addEventListener('resize', setLazySize);
