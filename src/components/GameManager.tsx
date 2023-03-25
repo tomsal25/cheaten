@@ -5,12 +5,16 @@ import { useStore } from '@nanostores/preact';
 
 import imgsrc from '../assets/preact.svg';
 import { GAME_CONFIG, GAME_ID } from '../config/Consts';
-import { DEBUG_ASSIGN_GAME_AS_GLOBAL } from '../config/Debug';
+import {
+  DEBUG_ASSIGN_GAME_AS_GLOBAL,
+  DEBUG_CHECK_ISMOVE,
+  DEBUG_g_isMove,
+} from '../config/Debug';
 import { sceneList } from '../scenes';
 import {
-  g_count,
   g_currentSceneKey,
   g_currentScreen,
+  g_flag,
   g_isPlaying,
   g_naviState,
   g_nextText,
@@ -20,48 +24,49 @@ import { CodeEditor } from './CodeEditor';
 import { DialogWindow } from './DialogWindow';
 import { NavigationRobot } from './NavigationRobot';
 
-const useScreenSize = () => {
-  const [width, setWidth] = useState(window.innerWidth);
-  const [height, setHeight] = useState(window.innerHeight);
+const _checkMove = () => {
+  const isMove = useStore(DEBUG_g_isMove);
+  const flag = useStore(g_flag);
 
-  useEffect(() => {
-    // FIXME: check delay time
-    const setLazySize = () => {
-      window.setTimeout(() => {
-        setWidth(document.documentElement.clientWidth);
-        setHeight(document.documentElement.clientHeight);
-      }, 100);
-    };
-    window.addEventListener('resize', setLazySize);
-    return () => {
-      window.removeEventListener('resize', setLazySize);
-    };
-  }, []);
-
-  return { width, height };
+  return (
+    <button>
+      {isMove ? 'moving' : 'paused'}
+      <br />
+      {`flag${flag}`}
+    </button>
+  );
 };
-
-const Buttons = ({ text }: { text: string }) => {
-  const Flag = ({ text }: { text: string }) => {
-  const flag = useStore(g_isPlaying);
-  const handler = () => {
-    text == '123' && g_isPlaying.set(!flag);
+const Buttons = () => {
+  const Flag = () => {
+    const flag = useStore(g_isPlaying);
+    const handler = () => {
+      g_isPlaying.set(!flag);
     };
     return <button onClick={handler}>{flag ? 'playing' : 'paused'}</button>;
   };
 
-  const Count = () => {
-    const atmCnt = useStore(g_count);
-    if (atmCnt % 2 == 1) g_currentScreen.set('editor');
-    else g_currentScreen.set('game');
-    return <button onClick={() => g_count.set(atmCnt + 1)}>{atmCnt}</button>;
+  const ScreenChanger = () => {
+    const currentScreen = useStore(g_currentScreen);
+
+    return currentScreen == 'init' ? null : (
+      <button
+        onClick={() =>
+          currentScreen == 'game'
+            ? g_currentScreen.set('editor')
+            : g_currentScreen.set('game')
+        }
+      >
+        {currentScreen}
+      </button>
+    );
   };
 
   return (
-    <>
-      <Flag text={text} />
-      <Count />
-    </>
+    <div>
+      <Flag />
+      <ScreenChanger />
+      {DEBUG_CHECK_ISMOVE && <_checkMove />}
+    </div>
   );
 };
 
@@ -115,18 +120,14 @@ const Navigator = ({ zIndex }: { zIndex: number }) => {
 };
 
 const Editor = ({
-  text,
-  setText,
+  zIndex,
 }: {
-  text: string;
-  setText: (str: string) => void;
+  zIndex: number;
 }) => {
   const isSelectEditor = useStore(g_currentScreen) == 'editor';
 
   return (
     <CodeEditor
-      text={text}
-      setText={str => setText(str)}
       style={{
         position: 'absolute',
         left: '50%',
@@ -149,9 +150,6 @@ const Editor = ({
 };
 
 export const GameManager = () => {
-  const [text, setText] = useState('123');
-  const { width, height } = useScreenSize();
-
   useEffect(() => {
     const _game = new Phaser.Game({ ...GAME_CONFIG, scene: sceneList });
     if (DEBUG_ASSIGN_GAME_AS_GLOBAL) {
@@ -181,18 +179,20 @@ export const GameManager = () => {
         id={GAME_ID}
         style={{
           position: 'relative',
-          width: `${width * 0.95}px`,
-          height: `${height * 0.8}px`,
-          backgroundColor: 'gray',
+          width: '95%',
+          height: '80%',
+          backgroundColor: 'BlueViolet',
           backgroundImage: `url('${imgsrc}')`,
+          backgroundSize: '20%',
         }}
       >
         <Navigator zIndex={1} />
-        <Editor text={text} setText={setText} />
+        <Dialog zIndex={1} />
+        <Editor zIndex={0} />
         {/* canvas will be inserted here */}
       </div>
 
-      <Buttons text={text} />
+      <Buttons />
     </>
   );
 };
