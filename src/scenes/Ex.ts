@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 
-import { IMAGE_KEY, SCENE_KEY } from '../config/KeyStore';
+import * as IMAGE_KEY from '../config/ImageKeyStore';
+import * as SCENE_KEY from '../config/SceneKeyStore';
 import { g_count, g_currentSceneKey } from '../store/Store';
 
 export class Ex extends Phaser.Scene {

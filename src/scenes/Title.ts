@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from '../config/Consts';
-import { IMAGE_KEY, SCENE_KEY } from '../config/KeyStore';
-import { g_currentSceneKey } from '../store/Store';
+import * as IMAGE_KEY from '../config/ImageKeyStore';
+import * as SCENE_KEY from '../config/SceneKeyStore';
 
 export class Title extends Phaser.Scene {
   private isReady = false;
@@ -23,17 +23,14 @@ export class Title extends Phaser.Scene {
     this.load.image(IMAGE_KEY.ENEMY, 'assets/particles/elec1.png');
   }
   create() {
-    this.physics.world.on('pause', () => {
-      console.log('paused');
-    });
-
+    this.isReady = false;
+    this.isStarted = false;
     // title
     this.add
       .text(CANVAS_WIDTH / 2, (CANVAS_HEIGHT / 3) * 1, 'Cheaten')
       .setColor('#ff0')
       .setFontSize(120)
-      .setOrigin(0.5)
-      .setInteractive();
+      .setOrigin(0.5);
 
     // start button
     this.add
@@ -46,7 +43,16 @@ export class Title extends Phaser.Scene {
         if (!this.isReady || this.isStarted) return;
         this.isStarted = true;
         this.cameras.main.fadeOut(1000, 0, 0, 0);
-        this.time.delayedCall(1500, () => this.scene.start(SCENE_KEY.STAGE1));
+        this.time.delayedCall(1500, () => {
+          if (!this.game.scene.getScene(SCENE_KEY.STAGE1)) {
+            import('./stage1/Stage1')
+              .then(e => {
+                this.game.scene.add(SCENE_KEY.STAGE1, e.Stage1);
+                this.scene.start(SCENE_KEY.STAGE1);
+              })
+              .catch(null);
+          } else this.scene.start(SCENE_KEY.STAGE1);
+        });
       });
 
     // effects on starting
@@ -54,9 +60,11 @@ export class Title extends Phaser.Scene {
       if (n == 1) this.isReady = true;
     });
 
-    g_currentSceneKey.set(SCENE_KEY.TITLE);
-  }
-  update() {
-    //
+    // import('./stage1/Stage1')
+    //   .then(e => {
+    //     this.game.scene.add(SCENE_KEY.STAGE1, e.Stage1);
+    //     this.scene.start(SCENE_KEY.STAGE1);
+    //   })
+    //   .catch(null);
   }
 }

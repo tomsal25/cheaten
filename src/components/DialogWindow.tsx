@@ -1,18 +1,13 @@
 import { CSSProperties } from 'preact/compat';
-import { useEffect, useState } from 'preact/hooks';
+import { Ref, useEffect, useRef, useState } from 'preact/hooks';
 import './DialogWindow.css';
 
-const NextIndicator = () => (
-  <span
-    style={{ marginLeft: 3, backgroundColor: 'BlueViolet', color: 'Khaki' }}
-  >
-    ▼
-  </span>
-);
+const NextIndicator = () => <span className="dialog-next">▼</span>;
 
 const useClickText = (
-  text: string[],
+  text: readonly string[],
   setFinishRead: () => void,
+  dialogRef: Ref<HTMLDivElement>,
   initialPage = 0
 ) => {
   const [page, setPage] = useState(initialPage);
@@ -21,10 +16,12 @@ const useClickText = (
 
   // on click
   useEffect(() => {
+    const current = dialogRef.current;
+    if (!current) return;
     const turnPage = () => setPage(p => p + 1);
-    window.addEventListener('click', turnPage);
-    return () => window.removeEventListener('click', turnPage);
-  }, [text]);
+    current.addEventListener('click', turnPage);
+    return () => current.removeEventListener('click', turnPage);
+  }, [text, dialogRef]);
 
   return page < lastPage ? text[page] : text[lastPage];
 };
@@ -36,15 +33,17 @@ export const DialogWindow = ({
   style,
 }: {
   name: string;
-  text: string[];
+  text: readonly string[];
   setFinished: () => void;
   style?: CSSProperties;
 }) => {
   const [isFinishRead, setIsFinishRead] = useState(false);
-  const displayText = useClickText(text, () => setIsFinishRead(true));
   const [originalStyle, setOriginalStyle] = useState<CSSProperties>({
     opacity: 0,
   });
+  const ref = useRef<HTMLDivElement>(null);
+
+  const displayText = useClickText(text, () => setIsFinishRead(true), ref);
 
   // on start
   useEffect(() => {
@@ -62,12 +61,9 @@ export const DialogWindow = ({
 
   return (
     <div
+      ref={ref}
       className="dialog-window"
-      style={{
-        transition: 'opacity .3s 0s ease-in-out',
-        ...originalStyle,
-        ...style,
-      }}
+      style={{ ...originalStyle, ...style }}
     >
       <div className="dialog-name">{name}</div>
       <div className="dialog-text">

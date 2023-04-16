@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from '../../config/Consts';
-import { IMAGE_KEY, SCENE_KEY } from '../../config/KeyStore';
+import * as IMAGE_KEY from '../../config/ImageKeyStore';
+import * as SCENE_KEY from '../../config/SceneKeyStore';
 import { g_currentSceneKey } from '../../store/Store';
 
 export class Stage2 extends Phaser.Scene {
@@ -89,10 +90,8 @@ export class Stage2 extends Phaser.Scene {
     );
 
     this.bullets.children.each(obj => {
-      const { body } = obj;
-      if (body instanceof Phaser.Physics.Arcade.Body) {
-        if (Math.abs(body.y) > CANVAS_HEIGHT) obj.destroy(true);
-      }
+      const body = obj.body as Phaser.Physics.Arcade.Body;
+      if (Math.abs(body.y) > CANVAS_HEIGHT) obj.destroy(true);
     });
   }
 

@@ -1,57 +1,33 @@
 import { CSSProperties } from 'preact/compat';
-import favsrc from '../assets/favicon.svg';
+
+import './NavigationRobot.css';
+
+const width = 40;
+const height = 40;
 
 export const NavigationRobot = ({
   top,
   left,
   style,
 }: {
-  top: string;
-  left: string;
+  top: string | null;
+  left: string | null;
   style?: CSSProperties;
 }) => {
-  const width = 40;
-  const height = 40;
-  const x = `calc(${top} - ${width / 2}px)`;
-  const y = `calc(${left} - ${height / 2}px)`;
-
   return (
     <div
+      className="navi-box"
       style={{
-        width,
-        height,
-        top: 0,
-        left: 0,
-        transform: `translate(${x}, ${y})`,
-        position: 'fixed',
+        transform:
+          top && left
+            ? `translate(calc(${top} - ${width / 2}px), calc(${left} - ${
+                height / 2
+              }px))`
+            : null,
         ...style,
       }}
     >
-      <style>
-        {`@keyframes loop {
-          0% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-30px);
-          }
-          100% {
-            transform: translateY(0);
-          }
-        }`}
-      </style>
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          animationName: 'loop',
-          animationDuration: '2s',
-          animationIterationCount: 'infinite',
-          animationDirection: 'alternate',
-          animationTimingFunction: 'ease-in-out',
-          backgroundImage: `url('${favsrc}')`,
-        }}
-      />
+      <div className="navi-robot" />
     </div>
   );
 };

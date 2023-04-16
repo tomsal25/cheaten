@@ -11,13 +11,16 @@
   padding: 5px;
   border: thick double white;
   box-sizing: border-box;
-  background-color: black;
+  background: black;
   transform: translate(-50%, 0%);
+  transition: opacity 0.3s 0s ease-in-out;
+  cursor: pointer;
+  user-select: none;
 }
 
 .dialog-name {
   width: fit-content;
-  padding: 0px 2px;
+  padding: 2px;
   border: thin solid white;
   color: white;
 }
@@ -29,4 +32,12 @@
   color: white;
   text-align: left;
   word-wrap: break-word;
+}
+
+.dialog-next {
+  margin-left: 3px;
+  /* blueviolet */
+  background: #8a2be2;
+  /* khaki */
+  color: #f0e68c;
 }

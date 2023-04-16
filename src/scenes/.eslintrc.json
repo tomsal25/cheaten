@@ -10,7 +10,7 @@
   },
   "overrides": [
     {
-      "files": ["./**/obj/**/*.ts"],
+      "files": ["./**/objects/**/*.ts"],
       "rules": { "max-classes-per-file": ["off"] }
     }
   ]

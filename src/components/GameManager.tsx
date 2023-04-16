@@ -2,12 +2,11 @@ import Phaser from 'phaser';
 import { useEffect, useState } from 'preact/hooks';
 
 import { useStore } from '@nanostores/preact';
-
-import imgsrc from '../assets/preact.svg';
 import { GAME_CONFIG, GAME_ID } from '../config/Consts';
 import {
   DEBUG_ASSIGN_GAME_AS_GLOBAL,
   DEBUG_CHECK_ISMOVE,
+  DEBUG_LOG_CURRENT_SCENE,
   DEBUG_g_isMove,
 } from '../config/Debug';
 import { sceneList } from '../scenes';
@@ -18,25 +17,28 @@ import {
   g_isPlaying,
   g_naviState,
   g_nextText,
+  g_targetPosition,
   stepTimeline,
 } from '../store/Store';
-import { CodeEditor } from './CodeEditor';
+import { Editor } from './CodeEditor';
 import { DialogWindow } from './DialogWindow';
 import { NavigationRobot } from './NavigationRobot';
+
+import './GameManager.css';
 
 const _checkMove = () => {
   const isMove = useStore(DEBUG_g_isMove);
   const flag = useStore(g_flag);
 
   return (
-    <button>
-      {isMove ? 'moving' : 'paused'}
-      <br />
-      {`flag${flag}`}
-    </button>
+    <>
+      <button>{isMove ? 'moving' : 'paused'}</button>
+      <button>{`flag${flag}`}</button>
+    </>
   );
 };
-const Buttons = () => {
+
+const DebugButtons = () => {
   const Flag = () => {
     const flag = useStore(g_isPlaying);
     const handler = () => {
@@ -62,7 +64,7 @@ const Buttons = () => {
   };
 
   return (
-    <div>
+    <div style={{ position: 'fixed', top: 0, left: 0, zIndex: ~1 >>> 1 }}>
       <Flag />
       <ScreenChanger />
       {DEBUG_CHECK_ISMOVE && <_checkMove />}
@@ -72,32 +74,9 @@ const Buttons = () => {
 
 const Navigator = ({ zIndex }: { zIndex: number }) => {
   const [isStartNavi, setIsStartNavi] = useState(false);
+
   const naviState = useStore(g_naviState);
-
-  const Dialog = () => {
-    const [isFinishedText, setIsFinishedText] = useState(false);
-    const nextText = useStore(g_nextText);
-
-    // check if finished reading
-    useEffect(() => {
-      if (naviState == 2 && isFinishedText) {
-        setIsFinishedText(false);
-        stepTimeline();
-      }
-    }, [isFinishedText]);
-
-    return !isFinishedText && nextText ? (
-      <DialogWindow
-        name="Robot"
-        text={nextText}
-        setFinished={() => setIsFinishedText(true)}
-        style={{ zIndex }}
-      />
-    ) : null;
-  };
-
-  const top = '65vw';
-  const left = '50vh';
+  const [x, y] = useStore(g_targetPosition);
 
   useEffect(() => {
     // on starting navi
@@ -107,64 +86,79 @@ const Navigator = ({ zIndex }: { zIndex: number }) => {
     }
     // on ending navi
     else if (naviState == 3) {
-      window.setTimeout(() => stepTimeline());
+      g_naviState.set(0);
+      g_targetPosition.set([0, 0]);
+      setIsStartNavi(false);
+      stepTimeline();
     }
   }, [naviState]);
 
-  return naviState != 3 ? (
+  return isStartNavi ? (
     <>
-      {isStartNavi ? <Dialog /> : null}
-      <NavigationRobot top={top} left={left} style={{ zIndex }} />
+      <NavigationRobot
+        top={x ? `${x}px` : null}
+        left={y ? `${y}px` : null}
+        style={{ zIndex }}
+      />
     </>
   ) : null;
 };
 
-const Editor = ({
-  zIndex,
-}: {
-  zIndex: number;
-}) => {
-  const isSelectEditor = useStore(g_currentScreen) == 'editor';
+const Dialog = ({ zIndex }: { zIndex: number }) => {
+  const [isFinishedText, setIsFinishedText] = useState(false);
+  const nextText = useStore(g_nextText);
 
-  return (
-    <CodeEditor
-      style={{
-        position: 'absolute',
-        left: '50%',
-        width: '100%',
-        maxWidth: '500px',
-        height: '100%',
-        zIndex: 0,
-        ...(isSelectEditor
-          ? {
-              transform: 'translate(-50%, 0%)',
-              transition: 'transform 1500ms ease',
-            }
-          : {
-              transform: 'translate(-50%, 0%) scale(0)',
-              transition: 'transform 1000ms ease',
-            }),
-      }}
+  // check if finished reading
+  useEffect(() => {
+    if (g_naviState.get() == 2 && isFinishedText) {
+      setIsFinishedText(false);
+      g_nextText.set(null);
+      stepTimeline();
+    }
+  }, [isFinishedText]);
+
+  return !isFinishedText && nextText ? (
+    <DialogWindow
+      name="Robot"
+      text={nextText}
+      setFinished={() => setIsFinishedText(true)}
+      style={{ zIndex }}
     />
-  );
+  ) : null;
 };
 
-export const GameManager = () => {
+const GameCanvas = ({ zIndex }: { zIndex: number }) => {
   useEffect(() => {
     const _game = new Phaser.Game({ ...GAME_CONFIG, scene: sceneList });
     if (DEBUG_ASSIGN_GAME_AS_GLOBAL) {
-      // @ts-expect-error 2339
-      window.game = _game;
+      Object.assign(window, { _game });
     }
+    if (DEBUG_LOG_CURRENT_SCENE) {
+      Object.assign(window, { _showScenes: () => _game.scene.dump() });
+    }
+
+    // do refresh, or position won't work properly after touching input element
+    const refreshCanvas = () => _game.scale.refresh();
+    _game.canvas.addEventListener('transitionend', refreshCanvas);
 
     const unsubscriberList = [
       g_isPlaying.listen(isPlaying => {
         const currentScene = g_currentSceneKey.get();
         if (!currentScene) return;
-        isPlaying
-          ? _game.scene.resume(currentScene)
-          : _game.scene.pause(currentScene);
+        if (isPlaying) {
+          _game.scene.resume(currentScene);
+        } else {
+          _game.scene.pause(currentScene);
+        }
       }),
+      g_currentScreen.subscribe(screen => {
+        Object.assign(_game.canvas.style, {
+          // TODO: consider style like turning a page of books
+          transform: `${screen == 'game' ? '' : 'scale(0)'}`,
+          transition: `transform ${screen == 'game' ? '1s' : '.5s'} ease`,
+        } as CSSStyleDeclaration);
+      }),
+      () => _game.canvas.removeEventListener('transitionend', refreshCanvas),
     ];
 
     return () => {
@@ -174,25 +168,28 @@ export const GameManager = () => {
   }, []);
 
   return (
-    <>
-      <div
-        id={GAME_ID}
-        style={{
-          position: 'relative',
-          width: '95%',
-          height: '80%',
-          backgroundColor: 'BlueViolet',
-          backgroundImage: `url('${imgsrc}')`,
-          backgroundSize: '20%',
-        }}
-      >
-        <Navigator zIndex={1} />
-        <Dialog zIndex={1} />
-        <Editor zIndex={0} />
+    <div className="canvas-wrapper" style={{ zIndex }}>
+      <div id={GAME_ID} style={{ display: 'grid', placeItems: 'center' }}>
         {/* canvas will be inserted here */}
       </div>
+    </div>
+  );
+};
 
-      <Buttons />
+export const GameManager = () => {
+  useEffect(() => {
+    g_currentScreen.set('game');
+  }, []);
+
+  return (
+    <>
+      <div className="game-container">
+        <Editor zIndex={1} />
+        <Navigator zIndex={9} />
+        <Dialog zIndex={5} />
+        <GameCanvas zIndex={0} />
+      </div>
+      {import.meta.env.DEV ? <DebugButtons /> : null}
     </>
   );
 };

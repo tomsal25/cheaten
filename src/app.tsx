@@ -15,19 +15,19 @@ const useKeepFullScreen = () => {
   const CSS_VAR_VW = '--100vw';
   const CSS_VAR_VH = '--100vh';
 
-  if (import.meta.env.DEV) {
-    document.documentElement.style.getPropertyValue(CSS_VAR_VW).length &&
-      console.error('property --100vw have been already used.');
-    document.documentElement.style.getPropertyValue(CSS_VAR_VH).length &&
-      console.error('property --100vh have been already used.');
-  }
-
-  Object.assign(document.body.style, {
-    width: `var(${CSS_VAR_VW},100vw)`,
-    height: `var(${CSS_VAR_VH},100vh)`,
-  });
-
   useEffect(() => {
+    if (import.meta.env.DEV) {
+      document.documentElement.style.getPropertyValue(CSS_VAR_VW).length &&
+        console.error('property --100vw has been already used.');
+      document.documentElement.style.getPropertyValue(CSS_VAR_VH).length &&
+        console.error('property --100vh has been already used.');
+    }
+
+    Object.assign(document.body.style, {
+      width: `var(${CSS_VAR_VW},100vw)`,
+      height: `var(${CSS_VAR_VH},100vh)`,
+    });
+
     const setLazySize = () => {
       // TODO: check delay time
       // window.setTimeout(() => {
@@ -56,6 +56,7 @@ const useKeepFullScreen = () => {
 
 export const App = () => {
   const [isStart, setIsStart] = useState(false);
+  // const [isStart, setIsStart] = useState(true);
   useKeepFullScreen();
 
   return (
