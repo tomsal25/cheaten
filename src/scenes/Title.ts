@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from '../config/Consts';
+import { DEBUG_SKIP_TITLE_SCENE } from '../config/Debug';
 import * as IMAGE_KEY from '../config/ImageKeyStore';
 import * as SCENE_KEY from '../config/SceneKeyStore';
 
@@ -60,11 +61,13 @@ export class Title extends Phaser.Scene {
       if (n == 1) this.isReady = true;
     });
 
-    // import('./stage1/Stage1')
-    //   .then(e => {
-    //     this.game.scene.add(SCENE_KEY.STAGE1, e.Stage1);
-    //     this.scene.start(SCENE_KEY.STAGE1);
-    //   })
-    //   .catch(null);
+    if (DEBUG_SKIP_TITLE_SCENE) {
+      import('./stage1/Stage1')
+        .then(e => {
+          this.game.scene.add(SCENE_KEY.STAGE1, e.Stage1);
+          this.scene.start(SCENE_KEY.STAGE1);
+        })
+        .catch(null);
+    }
   }
 }
