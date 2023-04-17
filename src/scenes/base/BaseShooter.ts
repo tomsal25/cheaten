@@ -8,7 +8,7 @@ export abstract class BaseShooter extends Phaser.Physics.Arcade.Image {
     return this._life;
   }
 
-  public setLife(life: number) {
+  public setNewLife(life: number) {
     this._life = life;
     this._maxLife = life;
   }

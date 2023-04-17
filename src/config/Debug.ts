@@ -21,3 +21,6 @@ export const DEBUG_g_isMove = atom(false);
 // skip something
 export const DEBUG_SKIP_WELCOME_SCREEN = isDev && true;
 export const DEBUG_SKIP_TITLE_SCENE = isDev && true;
+
+// for debugging game
+export const DEBUG_DISPLAY_INFO = isDev && true;

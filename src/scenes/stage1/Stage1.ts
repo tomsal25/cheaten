@@ -3,6 +3,7 @@ import { CANVAS_HEIGHT, CANVAS_WIDTH } from '../../config/Consts';
 import {
   DEBUG_CHECK_DUPLICATE_EVENT,
   DEBUG_CHECK_ISMOVE,
+  DEBUG_DISPLAY_INFO,
   DEBUG_g_isMove,
 } from '../../config/Debug';
 import * as IMAGE_KEY from '../../config/ImageKeyStore';
@@ -37,7 +38,6 @@ export class Stage1 extends Phaser.Scene {
   private player!: Player.Shooter;
   private playerWeapon!: Player.BulletGroup;
 
-  private text!: Phaser.GameObjects.Text;
   private clearText!: Phaser.GameObjects.Text;
 
   private colliderList: Phaser.Physics.Arcade.Collider[] = [];
@@ -51,10 +51,28 @@ export class Stage1 extends Phaser.Scene {
     // background
     this.add.image(400, 500, IMAGE_KEY.SKY_BG);
 
+    // FIXME: if scene made twice, throw error: physics doesn't exist
+    this.enemy = new Enemy.Shooter(this);
+    this.enemyWeapon = new Enemy.BulletGroup(this, this.enemy);
+    this.player = new Player.Shooter(this);
+    this.playerWeapon = new Player.BulletGroup(this, this.player);
+
     // debug text
-    this.text = this.add
-      .text(0, 0, '', { fontSize: '50px', color: '#ff0' })
-      .setDepth(10);
+    if (DEBUG_DISPLAY_INFO) {
+      const text = this.add
+        .text(0, 0, '', { fontSize: '50px', color: '#ff0' })
+        .setDepth(10);
+
+      this.events.on('update', () => {
+        text.setText([
+          `Player: ${this.player.life}/${this.player.maxLife}`,
+          `  Weapon:${this.playerWeapon.countActive()}`,
+          `Enemy: ${this.enemy.life}/${this.enemy.maxLife}`,
+          `  Weapon:${this.enemyWeapon.countActive()}`,
+          `fps: ${this.game.loop.actualFps}`,
+        ]);
+      });
+    }
 
     // clear screen
     this.clearText = this.add
@@ -65,12 +83,6 @@ export class Stage1 extends Phaser.Scene {
       .setOrigin()
       .setDepth(10);
 
-    // FIXME: if scene made twice, throw error: physics doesn't exist
-    this.player = new Player.Shooter(this);
-    this.playerWeapon = new Player.BulletGroup(this, this.player);
-    this.enemy = new Enemy.Shooter(this);
-    this.enemyWeapon = new Enemy.BulletGroup(this, this.enemy);
-
     this.pauseMovement();
 
     g_codeString.set(getCodeString());
@@ -79,18 +91,10 @@ export class Stage1 extends Phaser.Scene {
     g_currentSceneKey.set(SCENE_KEY.STAGE1);
   }
 
-  update(t: number, dt: number) {
-    this.text.setText([
-      `Player: ${this.player.life}/${this.player.maxLife}`,
-      `  Weapon:${this.playerWeapon.countActive()}`,
-      `Enemy: ${this.enemy.life}/${this.enemy.maxLife}`,
-      `  Weapon:${this.enemyWeapon.countActive()}`,
-      `fps: ${this.game.loop.actualFps}`,
-    ]);
-
+  update() {
     // update objects
     this.player.update();
-    this.playerWeapon.update(t, dt);
+    this.playerWeapon.update();
     this.enemy.update();
     this.enemyWeapon.update();
 
@@ -102,9 +106,8 @@ export class Stage1 extends Phaser.Scene {
       setWaitFlag();
       this.resetScreen();
       this.setEnemyAttack();
-      // do these at their own constructor
-      // this.player.setLife(100);
-      // this.enemy.setLife(20000);
+      this.player.setNewLife(100);
+      this.enemy.setNewLife(15000);
 
       stepTimeline();
     }
@@ -178,9 +181,15 @@ export class Stage1 extends Phaser.Scene {
         // set new life and new game
         const num = parseInt(value, 10);
 
+        if (num == 0) {
+          stepTimeline();
+          return;
+        }
+
         this.resetScreen();
         this.setEnemyAttack();
-        this.player.setLife(Number.isFinite(num) ? num : 1e100);
+        this.player.setNewLife(Number.isFinite(num) && num < 1e4 ? num : 1e4);
+        this.enemy.setNewLife(15000);
         this.stepFlag(9);
       }
     }
