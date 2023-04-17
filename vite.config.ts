@@ -13,4 +13,19 @@ export default defineConfig({
       },
     } as PluginOption,
   ],
+
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: id => {
+          if (id.includes('node_modules')) {
+            if (id.includes('phaser')) {
+              return 'phaser';
+            }
+            return 'vendor';
+          }
+        },
+      },
+    },
+  },
 });
