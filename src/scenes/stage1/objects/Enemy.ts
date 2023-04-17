@@ -4,8 +4,11 @@ import { CANVAS_HEIGHT, CANVAS_WIDTH } from '../../../config/Consts';
 import * as IMAGE_KEY from '../../../config/ImageKeyStore';
 import { BaseShooter } from '../../base/BaseShooter';
 import { Bullet } from '../../base/Bullet';
+import { LifeBar } from '../../base/LifeBar';
 
 export class Shooter extends BaseShooter {
+  private _lifeBar: LifeBar;
+
   constructor(scene: Phaser.Scene) {
     super(scene, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 5, IMAGE_KEY.WIZBALL);
     scene.add.existing(this);
@@ -16,7 +19,18 @@ export class Shooter extends BaseShooter {
 
     this.setDisplaySize(width, height).setBodySize(width / 3, height / 3);
 
-    this.setLife(20000);
+    this._lifeBar = new LifeBar(scene, 0x00ff00, 100);
+  }
+
+  update() {
+    // move a life bar
+    this._lifeBar.setPosition(
+      this.x - this._lifeBar.boxWidth / 2,
+      this.y + this.displayHeight / 2 + 10
+    );
+
+    // render a life bar
+    this._lifeBar.renderLife(this.life / this.maxLife);
   }
 }
 

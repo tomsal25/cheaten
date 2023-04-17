@@ -2,6 +2,7 @@ import { useEffect, useState } from 'preact/hooks';
 
 import './app.css';
 import { GameManager } from './components/GameManager';
+import { DEBUG_SKIP_WELCOME_SCREEN } from './config/Debug';
 
 const StartButton = ({ setStart }: { setStart: () => void }) => {
   return (
@@ -56,8 +57,9 @@ const useKeepFullScreen = () => {
 
 export const App = () => {
   const [isStart, setIsStart] = useState(false);
-  // const [isStart, setIsStart] = useState(true);
+
   useKeepFullScreen();
+  if (DEBUG_SKIP_WELCOME_SCREEN) setIsStart(true);
 
   return (
     <>

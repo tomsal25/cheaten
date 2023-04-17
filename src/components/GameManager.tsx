@@ -63,10 +63,26 @@ const DebugButtons = () => {
     );
   };
 
+  const DialogChanger = () => {
+    const [isVisible, setIsVisible] = useState(true);
+    useEffect(() => {
+      const element = document.querySelector<HTMLDivElement>('.dialog-window');
+      if (!element) return;
+      element.style.visibility = isVisible ? '' : 'hidden';
+    }, [isVisible]);
+
+    return (
+      <button onClick={() => setIsVisible(f => !f)}>
+        {isVisible ? 'visible' : 'invisible'}
+      </button>
+    );
+  };
+
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, zIndex: ~1 >>> 1 }}>
       <Flag />
       <ScreenChanger />
+      <DialogChanger />
       {DEBUG_CHECK_ISMOVE && <_checkMove />}
     </div>
   );

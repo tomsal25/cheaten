@@ -4,13 +4,14 @@ import { CANVAS_HEIGHT, CANVAS_WIDTH } from '../../../config/Consts';
 import * as IMAGE_KEY from '../../../config/ImageKeyStore';
 import { BaseShooter } from '../../base/BaseShooter';
 import { Bullet } from '../../base/Bullet';
+import { LifeBar } from '../../base/LifeBar';
 
 let isMovable = false;
 
 export class Shooter extends BaseShooter {
-  private targetX = 400;
-  private targetY = 600;
-  // private _lifeBar: LifeBar;
+  private targetX = CANVAS_WIDTH / 2;
+  private targetY = (CANVAS_HEIGHT * 3) / 5;
+  private _lifeBar: LifeBar;
 
   constructor(scene: Phaser.Scene) {
     super(scene, CANVAS_WIDTH / 2, (CANVAS_HEIGHT * 3) / 5, IMAGE_KEY.SHIP);
@@ -20,9 +21,7 @@ export class Shooter extends BaseShooter {
     this.setScale(0.8).setCollideWorldBounds(true);
     isMovable = true;
 
-    this.setLife(100);
-
-    // this._lifeBar = new LifeBar(scene, 0xff0000);
+    this._lifeBar = new LifeBar(scene, 0x00ff00, 100);
   }
 
   update() {
@@ -35,8 +34,18 @@ export class Shooter extends BaseShooter {
       this.targetX = worldX;
       this.targetY = worldY;
     }
+
     // chase pointer
     this.scene.physics.moveTo(this, this.targetX, this.targetY, 400, 50);
+
+    // move a life bar
+    this._lifeBar.setPosition(
+      this.x - this._lifeBar.boxWidth / 2,
+      this.y + this.displayHeight / 2 + 10
+    );
+
+    // render a life bar
+    this._lifeBar.renderLife(this.life / this.maxLife);
   }
 
   public pausePlayer() {
@@ -48,14 +57,21 @@ export class Shooter extends BaseShooter {
   }
 
   public resetPosition() {
-    this.targetX = 400;
-    this.targetY = 600;
+    this.targetX = CANVAS_WIDTH / 2;
+    this.targetY = (CANVAS_HEIGHT * 3) / 5;
+  }
+
+  public setNewLife(life: number) {
+    super.setNewLife(life);
+
+    const width = 50 + Math.log(1 + life * 0.001) * 300;
+    const maxWidth = CANVAS_WIDTH * 0.9;
+
+    this._lifeBar.setBoxWidth(Math.floor(Math.min(width, maxWidth)));
   }
 }
 
 export class BulletGroup extends Phaser.Physics.Arcade.Group {
-  private elapsedTime = 0;
-
   constructor(scene: Phaser.Scene, private player: Shooter) {
     super(scene.physics.world, scene, {
       classType: Bullet,
@@ -64,13 +80,9 @@ export class BulletGroup extends Phaser.Physics.Arcade.Group {
     });
   }
 
-  update(t: number, dt: number) {
-    this.elapsedTime += dt;
-    if (this.elapsedTime >= 3000) {
-      // console.log('3000ms経過');
-      this.elapsedTime %= 3000;
-    }
+  update() {
     this.children.each(e => e.update());
+
     // FIXME: on smartphone, moving finger while touching the canvas causes odd player speed
     if (isMovable && this.scene.input.activePointer.isDown) {
       const { x, y } = this.scene.input.activePointer;

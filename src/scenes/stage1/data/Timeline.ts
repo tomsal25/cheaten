@@ -42,7 +42,7 @@ export const timeline: TimelineList = [
   { type: 'navistart' },
   {
     type: 'navi',
-    text: ['数を入力してね。'],
+    text: ['0以上の数を入力してね。'],
   },
   { type: 'naviend' },
   { type: 'flag', flag: 8 },
