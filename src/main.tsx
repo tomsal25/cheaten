@@ -1,5 +1,10 @@
-import { render } from 'preact';
+import { DEBUG_PREACT_DEBUG } from './config/Debug';
+if (DEBUG_PREACT_DEBUG) {
+  // @ts-expect-error 7016
+  import('preact/debug');
+}
 
+import { render } from 'preact';
 import { App } from './app';
 import './index.css';
 

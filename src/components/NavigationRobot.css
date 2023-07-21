@@ -1,0 +1,43 @@
+.navi-box {
+  width: 40px;
+  height: 40px;
+  top: 0;
+  left: 0;
+  position: fixed;
+  /* offset of width and height (do this in JS) */
+  /* transform: translate(calc(60vw - 20px), calc(45vh - 20px)); */
+  transform: translate(60vw, 45vh);
+  transition: transform 0.1s 0s;
+}
+
+.navi-robot {
+  width: 100%;
+  height: 100%;
+  /*
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-name: navi-loop; */
+  animation: 1.5s ease-in-out 0s infinite alternate navi-loop;
+  background: url('/src/assets/img/naviRobot.svg');
+}
+
+@keyframes navi-loop {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-30%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .navi-box {
+    /* transform: translate(calc(80vw - 20px), calc(40vh - 20px)); */
+    transform: translate(80vw, 40vh);
+  }
+}

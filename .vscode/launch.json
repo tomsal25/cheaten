@@ -1,0 +1,44 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "firefox",
+      "request": "launch",
+      "reAttach": true,
+      "name": "FireFox Debug",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "firefox",
+      "request": "launch",
+      "reAttach": true,
+      "name": "FireFox Debug (skip modules)",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}",
+      "skipFiles": ["${workspaceFolder}/node_modules/**/*.js"]
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Chrome Debug",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Chrome Debug (skip modules)",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}",
+      "skipFiles": ["${workspaceFolder}/node_modules/**/*.js"]
+    },
+    {
+      "type": "msedge",
+      "request": "launch",
+      "name": "Edge Debug",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}"
+    }
+  ]
+}

@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 
-import { SCENE_KEY } from '../config/KeyStore';
-import { atomCount, currentSceneKey } from '../store/Store';
+import * as IMAGE_KEY from '../config/ImageKeyStore';
+import * as SCENE_KEY from '../config/SceneKeyStore';
+import { g_count, g_currentSceneKey } from '../store/Store';
 
 export class Ex extends Phaser.Scene {
   constructor() {
@@ -11,17 +12,14 @@ export class Ex extends Phaser.Scene {
   preload() {
     this.load.setBaseURL('https://labs.phaser.io');
 
-    this.load.image('sky', 'assets/skies/space3.png');
-    this.load.image('logo', 'assets/skies/space3.png');
-    this.load.image('red', 'assets/particles/red.png');
     this.cameras.main.fadeIn(400, 0, 0, 0);
   }
 
   create() {
-    this.add.image(400, 300, 'sky');
+    this.add.image(400, 300, IMAGE_KEY.SKY);
     this.add.text(200, 200, 'Phaser 3').setFontSize(64).setColor('#0f0');
 
-    const particles = this.add.particles('red');
+    const particles = this.add.particles(IMAGE_KEY.RED);
     const emitter = particles.createEmitter({
       speed: 100,
       scale: { start: 1, end: 0 },
@@ -29,14 +27,14 @@ export class Ex extends Phaser.Scene {
     });
 
     const logo = this.physics.add
-      .image(400, 100, 'logo')
+      .image(400, 100, IMAGE_KEY.LOGO)
       .setVelocity(100, 200)
       .setBounce(1, 1)
       .setCollideWorldBounds(true);
 
     emitter.startFollow(logo);
 
-    const ball2 = this.add.image(70, 20, 'wizball');
+    const ball2 = this.add.image(70, 20, IMAGE_KEY.ENEMY);
 
     this.tweens.add({
       targets: ball2,
@@ -63,11 +61,11 @@ export class Ex extends Phaser.Scene {
       .setInteractive()
       .once('pointerdown', () => {
         text.setText('OK!!');
-        atomCount.set(1000000);
+        g_count.set(1000000);
         this.scene.start(SCENE_KEY.STAGE2);
       });
 
-    currentSceneKey.set(SCENE_KEY.EX);
+    g_currentSceneKey.set(SCENE_KEY.EX);
   }
 
   update() {

@@ -1,51 +1,72 @@
-import { FunctionComponent, JSX } from 'preact/compat';
+import { useStore } from '@nanostores/preact';
+import { WritableAtom } from 'nanostores';
 
-import { isPositiveInt } from '../util/Validate';
+import { useEffect, useRef } from 'preact/hooks';
+import {
+  g_codeString,
+  g_componentInfoList,
+  g_currentScreen,
+  g_inputValueList,
+  g_isInputEnabled,
+  g_isSubmitted,
+  g_targetScrollPos,
+} from '../store/Store';
+import './CodeEditor.css';
+import { CodeParser } from './CodeParser';
 
-export const CodeEditor: FunctionComponent<{
-  text: string;
-  setText: (str: string) => void;
-}> = ({ text, setText }) => {
-  const validator = isPositiveInt;
+const SubmitButton = ({ isEnabled }: { isEnabled: WritableAtom<boolean> }) => {
+  const flag = useStore(isEnabled);
 
-  const typeHandler: JSX.GenericEventHandler<HTMLInputElement> = e => {
-    const { value } = e.currentTarget;
-    if (!validator(value)) {
-      e.currentTarget.value = text;
-      return;
-    }
-    setText(value);
-
-    // special action
-    // if (value === '111') e.currentTarget.blur();
+  const checkInputValue = () => {
+    isEnabled.set(false);
+    const infoList = g_componentInfoList.get();
+    if (!infoList) return;
+    g_inputValueList.set(infoList.map(e => e.getValue()));
+    g_isSubmitted.set(true);
   };
 
   return (
-    <>
-      <div
-        id="code-editor"
-        style={{
-          backgroundColor: '#2d333879',
-          letterSpacing: '0.5px',
-          // transform: 'translate(0px,-300px)',
-        }}
-      >
-        <span style={{ color: 'yellow' }}>const</span>
-        <span> </span>
-        <span style={{ color: 'springgreen' }}>myvar</span>
-        <span> = </span>
-        <input
-          type="text"
-          value={text}
-          onInput={typeHandler}
-          style={{
-            width: `30px`,
-            letterSpacing: '0.5px',
-            color: 'lightcyan',
-          }}
-        />
-        <span>;</span>
+    <button
+      disabled={!flag}
+      onClick={checkInputValue}
+      style={{ position: 'absolute', top: 20, right: 30, zIndex: 1 }}
+    >
+      {flag ? 'Run' : 'Lock'}
+    </button>
+  );
+};
+
+export const Editor = ({ zIndex }: { zIndex: number }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    return g_targetScrollPos.listen(([, y]) => {
+      ref.current?.scroll({ top: y - 120, behavior: 'smooth' });
+    });
+  }, []);
+
+  const isSelectEditor = useStore(g_currentScreen) == 'editor';
+  const codeString = useStore(g_codeString);
+
+  return (
+    <div
+      className="code-container"
+      style={{
+        zIndex,
+        transform: `${isSelectEditor ? '' : 'scale(0)'}`,
+        transition: `transform ${isSelectEditor ? '1s' : '.5s'} ease`,
+      }}
+    >
+      <div className="code-wrapper">
+        {/* TODO: consider using position:sticky */}
+        <SubmitButton isEnabled={g_isInputEnabled} />
+        <div
+          ref={ref}
+          className="code-editor"
+          style={{ userSelect: isSelectEditor ? 'text' : 'none' }}
+        >
+          <CodeParser codeString={codeString} isEnabled={g_isInputEnabled} />
+        </div>
       </div>
-    </>
+    </div>
   );
 };

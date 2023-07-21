@@ -12,28 +12,16 @@
   padding: 0;
   margin: 0;
   touch-action: pan-x pan-y;
-  user-select: none;
+  /* user-select: none; */
 }
 
 body {
   margin: 0;
-  height: 100vh;
+  max-height: 100vh;
   display: flex;
   place-items: center;
   justify-content: center;
   overflow: hidden;
-}
-
-#code-editor input {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background: transparent;
-  border-style: dotted;
-  border-radius: 1px;
-  border-color: rgba(255, 255, 255, 0.5);
-  outline: none;
-  margin: 0 2px;
 }
 
 button {
@@ -43,9 +31,10 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #ddc7c7;
+  background: #ddc7c7;
   cursor: pointer;
   transition: border-color 0.25s;
+  user-select: none;
 }
 button:hover {
   border-color: #646cff;

@@ -1,8 +1,9 @@
 import Phaser from 'phaser';
 
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from '../config/Consts';
-import { SCENE_KEY } from '../config/KeyStore';
-import { currentSceneKey } from '../store/Store';
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from '../../config/Consts';
+import * as IMAGE_KEY from '../../config/ImageKeyStore';
+import * as SCENE_KEY from '../../config/SceneKeyStore';
+import { g_currentSceneKey } from '../../store/Store';
 
 export class Stage2 extends Phaser.Scene {
   private player!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
@@ -16,32 +17,28 @@ export class Stage2 extends Phaser.Scene {
   }
 
   preload() {
-    this.load.setBaseURL('https://labs.phaser.io');
-
-    this.load.image('ship', 'assets/sprites/ship.png');
-    this.load.image('bullet', 'assets/sprites/bullet.png');
-    this.load.image('enemy', 'assets/particles/elec1.png');
+    //
   }
   create() {
     this.player = this.physics.add
-      .sprite(400, 500, 'ship')
+      .sprite(400, 500, IMAGE_KEY.YOU)
       .setScale(0.5)
       .setCollideWorldBounds(true);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.bullets = this.physics.add.group({
-      defaultKey: 'bullet',
+      defaultKey: IMAGE_KEY.YOU_BULLET,
       maxSize: 600,
     });
 
     this.enemies = this.physics.add.group({
-      defaultKey: 'enemy',
+      defaultKey: IMAGE_KEY.ENEMY_BULLET,
       maxSize: 1000,
     });
 
     this.time.addEvent({
-      delay: 0,
+      delay: 1100,
       repeat: 10,
       callback: this.addEnemy,
       loop: true,
@@ -61,7 +58,7 @@ export class Stage2 extends Phaser.Scene {
     this.physics.add.overlap(this.bullets, this.enemies, this.hitEnemy);
     this.physics.add.overlap(this.player, this.enemies, this.hitPlayer);
 
-    currentSceneKey.set(SCENE_KEY.STAGE2);
+    g_currentSceneKey.set(SCENE_KEY.STAGE2);
   }
   update() {
     if (!this.player.active) return;
@@ -93,10 +90,8 @@ export class Stage2 extends Phaser.Scene {
     );
 
     this.bullets.children.each(obj => {
-      const { body } = obj;
-      if (body instanceof Phaser.Physics.Arcade.Body) {
-        if (Math.abs(body.y) > CANVAS_HEIGHT) obj.destroy(true);
-      }
+      const body = obj.body as Phaser.Physics.Arcade.Body;
+      if (Math.abs(body.y) > CANVAS_HEIGHT) obj.destroy(true);
     });
   }
 
@@ -112,16 +107,16 @@ export class Stage2 extends Phaser.Scene {
 
   private addEnemy = () => {
     if (this.enemies.isFull()) return;
-    const x = Phaser.Math.RND.integerInRange(0, CANVAS_WIDTH);
-    const y = -50;
-    const enemy = this.enemies.get(
-      x,
-      y
-    ) as Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
-
-    enemy
-      .enableBody(true, x, y, true, true)
-      .setVelocityY(Phaser.Math.RND.integerInRange(10, 100));
+    for (let i = 0; i < 100; i++) {
+      const x = Phaser.Math.RND.between(0, CANVAS_WIDTH);
+      const y = Phaser.Math.RND.between(0, CANVAS_HEIGHT / 10);
+      this.enemies.create(x, y);
+      console.log(
+        this.enemies.getLast() as Phaser.Types.Physics.Arcade.SpriteWithDynamicBody
+      );
+      //  .setVelocityY(10);
+      this.enemies.setVelocityY(100);
+    }
   };
 
   private hitEnemy: ArcadePhysicsCallback = (bullet, enemy) => {
