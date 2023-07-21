@@ -13,15 +13,15 @@ export class Title extends Phaser.Scene {
   }
 
   preload() {
-    this.load.setBaseURL('https://labs.phaser.io');
-    this.load.image(IMAGE_KEY.SKY, 'assets/skies/space3.png');
-    this.load.image(IMAGE_KEY.LOGO, 'assets/sprites/phaser3-logo.png');
-    this.load.image(IMAGE_KEY.RED, 'assets/particles/red.png');
-    this.load.image(IMAGE_KEY.SKY_BG, 'assets/skies/gradient13.png');
-    this.load.image(IMAGE_KEY.WIZBALL, 'assets/sprites/wizball.png');
-    this.load.image(IMAGE_KEY.SHIP, 'assets/sprites/ship.png');
-    this.load.image(IMAGE_KEY.BULLET, 'assets/sprites/bullet.png');
-    this.load.image(IMAGE_KEY.ENEMY, 'assets/particles/elec1.png');
+    this.load.image(IMAGE_KEY.BG_1, '/assets/img/bg1.png');
+    this.load.image(IMAGE_KEY.YOU, '/assets/img/you.png');
+    this.load.image(IMAGE_KEY.YOU_BULLET, '/assets/img/me_bullet.png');
+    this.load.image(IMAGE_KEY.ENEMY, '/assets/img/enemy.png');
+    this.load.image(IMAGE_KEY.ENEMY_BULLET, '/assets/img/enemy_bullet.png');
+
+    // this.load.image(IMAGE_KEY.SKY);
+    // this.load.image(IMAGE_KEY.LOGO);
+    // this.load.image(IMAGE_KEY.RED);
   }
   create() {
     this.isReady = false;
@@ -45,7 +45,7 @@ export class Title extends Phaser.Scene {
         this.isStarted = true;
         this.cameras.main.fadeOut(1000, 0, 0, 0);
         this.time.delayedCall(1500, () => {
-          if (!this.game.scene.getScene(SCENE_KEY.STAGE1)) {
+          if (this.game.scene.getIndex(SCENE_KEY.STAGE1) < 0) {
             import('./stage1/Stage1')
               .then(e => {
                 this.game.scene.add(SCENE_KEY.STAGE1, e.Stage1);
