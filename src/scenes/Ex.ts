@@ -34,7 +34,7 @@ export class Ex extends Phaser.Scene {
 
     emitter.startFollow(logo);
 
-    const ball2 = this.add.image(70, 20, IMAGE_KEY.WIZBALL);
+    const ball2 = this.add.image(70, 20, IMAGE_KEY.ENEMY);
 
     this.tweens.add({
       targets: ball2,

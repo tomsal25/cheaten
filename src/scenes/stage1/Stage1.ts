@@ -49,7 +49,7 @@ export class Stage1 extends Phaser.Scene {
 
   create() {
     // background
-    this.add.image(400, 500, IMAGE_KEY.SKY_BG);
+    this.add.image(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, IMAGE_KEY.BG_1);
 
     // FIXME: if scene made twice, throw error: physics doesn't exist
     this.enemy = new Enemy.Shooter(this);
@@ -234,8 +234,8 @@ export class Stage1 extends Phaser.Scene {
       throw new Error('duplicate event');
 
     this.enemyAttackEvent = this.time.addEvent({
-      delay: 700,
-      callback: () => this.enemyWeapon.setBullet(20),
+      delay: 500,
+      callback: () => this.enemyWeapon.setBullet(50),
       loop: true,
     });
   }

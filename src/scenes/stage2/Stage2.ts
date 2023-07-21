@@ -21,19 +21,19 @@ export class Stage2 extends Phaser.Scene {
   }
   create() {
     this.player = this.physics.add
-      .sprite(400, 500, IMAGE_KEY.SHIP)
+      .sprite(400, 500, IMAGE_KEY.YOU)
       .setScale(0.5)
       .setCollideWorldBounds(true);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.bullets = this.physics.add.group({
-      defaultKey: IMAGE_KEY.BULLET,
+      defaultKey: IMAGE_KEY.YOU_BULLET,
       maxSize: 600,
     });
 
     this.enemies = this.physics.add.group({
-      defaultKey: IMAGE_KEY.ENEMY,
+      defaultKey: IMAGE_KEY.ENEMY_BULLET,
       maxSize: 1000,
     });
 

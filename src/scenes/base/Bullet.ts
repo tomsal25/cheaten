@@ -8,11 +8,11 @@ export class Bullet extends Phaser.Physics.Arcade.Image {
 
   update() {
     const { x, y } = this;
-    if (y < -100 || y > CANVAS_HEIGHT + 30) {
+    if (y < -100 || y > CANVAS_HEIGHT + 100) {
       this.destroy();
       return;
     }
-    if (x < -30 || x > CANVAS_WIDTH + 30) {
+    if (x < -100 || x > CANVAS_WIDTH + 100) {
       this.destroy();
       return;
     }

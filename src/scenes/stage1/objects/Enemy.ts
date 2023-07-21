@@ -10,14 +10,17 @@ export class Shooter extends BaseShooter {
   private _lifeBar: LifeBar;
 
   constructor(scene: Phaser.Scene) {
-    super(scene, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 5, IMAGE_KEY.WIZBALL);
+    super(scene, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 5, IMAGE_KEY.ENEMY);
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
     const width = 200;
     const height = 200;
 
-    this.setDisplaySize(width, height).setBodySize(width / 3, height / 3);
+    this.setDisplaySize(width, height).setBodySize(
+      this.width * 0.8,
+      this.height * 0.8
+    );
 
     this._lifeBar = new LifeBar(scene, 0x00ff00, 100);
   }
@@ -47,11 +50,12 @@ export class BulletGroup extends Phaser.Physics.Arcade.Group {
   constructor(scene: Phaser.Scene, private player: Shooter) {
     super(scene.physics.world, scene, {
       classType: Bullet,
-      defaultKey: IMAGE_KEY.ENEMY,
+      defaultKey: IMAGE_KEY.ENEMY_BULLET,
       maxSize: 300,
     });
 
-    const { width, height } = scene.textures.get(IMAGE_KEY.ENEMY).source[0];
+    const { width, height } = scene.textures.get(IMAGE_KEY.ENEMY_BULLET)
+      .source[0];
     this.width = width;
     this.height = height;
     this.hitWidth = width / 3;
@@ -79,7 +83,7 @@ export class BulletGroup extends Phaser.Physics.Arcade.Group {
         .setBodySize(this.hitWidth, this.hitHeight)
         // .setCircle(this.radius, this.offsetX, this.offsetY)
         .refreshBody()
-        .setScale(2);
+        .setScale(2.5);
     }
   }
 

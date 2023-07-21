@@ -20,7 +20,7 @@
     animation-direction: alternate;
     animation-name: navi-loop; */
   animation: 1.5s ease-in-out 0s infinite alternate navi-loop;
-  background: url('/src/assets/naviRobot.svg');
+  background: url('/src/assets/img/naviRobot.svg');
 }
 
 @keyframes navi-loop {

@@ -6,27 +6,32 @@ import { BaseShooter } from '../../base/BaseShooter';
 import { Bullet } from '../../base/Bullet';
 import { LifeBar } from '../../base/LifeBar';
 
-let isMovable = false;
-
 export class Shooter extends BaseShooter {
   private targetX = CANVAS_WIDTH / 2;
   private targetY = (CANVAS_HEIGHT * 3) / 5;
   private _lifeBar: LifeBar;
+  public _isMovable = false;
 
   constructor(scene: Phaser.Scene) {
-    super(scene, CANVAS_WIDTH / 2, (CANVAS_HEIGHT * 3) / 5, IMAGE_KEY.SHIP);
+    super(scene, CANVAS_WIDTH / 2, (CANVAS_HEIGHT * 3) / 5, IMAGE_KEY.YOU);
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
-    this.setScale(0.8).setCollideWorldBounds(true);
-    isMovable = true;
+    const width = 90;
+    const height = 110;
+
+    this.setDisplaySize(width, height)
+      .setBodySize(this.width * 0.8, this.height * 0.8)
+      .setCollideWorldBounds(true);
+
+    this._isMovable = true;
 
     this._lifeBar = new LifeBar(scene, 0x00ff00, 100);
   }
 
   update() {
     // move character
-    if (isMovable && this.scene.input.activePointer.isDown) {
+    if (this._isMovable && this.scene.input.activePointer.isDown) {
       const { x, y, worldX, worldY } = this.scene.input.activePointer;
       // return if out of screen
       if (y < 0 || y > CANVAS_HEIGHT) return;
@@ -49,11 +54,11 @@ export class Shooter extends BaseShooter {
   }
 
   public pausePlayer() {
-    isMovable = false;
+    this._isMovable = false;
   }
 
   public resumePlayer() {
-    isMovable = true;
+    this._isMovable = true;
   }
 
   public resetPosition() {
@@ -72,19 +77,27 @@ export class Shooter extends BaseShooter {
 }
 
 export class BulletGroup extends Phaser.Physics.Arcade.Group {
+  private hitWidth: number;
+  private hitHeight: number;
+
   constructor(scene: Phaser.Scene, private player: Shooter) {
     super(scene.physics.world, scene, {
       classType: Bullet,
-      defaultKey: IMAGE_KEY.BULLET,
+      defaultKey: IMAGE_KEY.YOU_BULLET,
       maxSize: 250,
     });
+
+    const { width, height } = scene.textures.get(IMAGE_KEY.YOU_BULLET)
+      .source[0];
+    this.hitWidth = width / 3;
+    this.hitHeight = height / 3;
   }
 
   update() {
     this.children.each(e => e.update());
 
     // FIXME: on smartphone, moving finger while touching the canvas causes odd player speed
-    if (isMovable && this.scene.input.activePointer.isDown) {
+    if (this.player._isMovable && this.scene.input.activePointer.isDown) {
       const { x, y } = this.scene.input.activePointer;
       // return if out of screen
       if (y < 0 || y > CANVAS_HEIGHT) return;
@@ -96,7 +109,11 @@ export class BulletGroup extends Phaser.Physics.Arcade.Group {
   private fireBullet(count = 1) {
     for (let i = 0; i < count; i++) {
       if (this.isFull()) return;
-      (this.get(this.player.x, this.player.y) as Bullet).setVelocityY(-300);
+      (this.get(this.player.x, this.player.y) as Bullet)
+        .setVelocityY(-300)
+        .setBodySize(this.hitWidth, this.hitHeight)
+        .refreshBody()
+        .setScale(0.3);
     }
   }
 

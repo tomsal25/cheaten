@@ -6,7 +6,7 @@
     background-image: url('/src/assets/favicon.svg');
     background-color: blueviolet;
     background-size: 20%; */
-  background: url('/src/assets/favicon.svg') blueviolet 0/20%;
+  /* background: url('/src/assets/image/favicon.svg') blueviolet 0/20%; */
 }
 
 .canvas-wrapper {
