@@ -34,9 +34,10 @@ export const GameManager = () => {
 
     // boot Phaser
     const des = boot();
-    console.log(des);
 
+    // set destructor for something...
     setDestrutor([...destrutor, des]);
+
     // change screen
     g_currentScreen.set('game');
   };
