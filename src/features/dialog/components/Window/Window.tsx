@@ -1,30 +1,9 @@
 import { CSSProperties } from 'preact/compat';
-import { Ref, useEffect, useRef, useState } from 'preact/hooks';
-import './DialogWindow.css';
+import { useEffect, useRef, useState } from 'preact/hooks';
+import { useClickText } from '../../hooks/useClickText';
+import styles from './Window.module.scss';
 
-const NextIndicator = () => <span className="dialog-next">▼</span>;
-
-const useClickText = (
-  text: readonly string[],
-  setFinishRead: () => void,
-  dialogRef: Ref<HTMLDivElement>,
-  initialPage = 0
-) => {
-  const [page, setPage] = useState(initialPage);
-  const lastPage = text.length - 1;
-  if (page > lastPage) setFinishRead();
-
-  // on click
-  useEffect(() => {
-    const current = dialogRef.current;
-    if (!current) return;
-    const turnPage = () => setPage(p => p + 1);
-    current.addEventListener('click', turnPage);
-    return () => current.removeEventListener('click', turnPage);
-  }, [text, dialogRef]);
-
-  return page < lastPage ? text[page] : text[lastPage];
-};
+const NextIndicator = () => <span className={styles.next}>▼</span>;
 
 export const DialogWindow = ({
   name,
@@ -62,11 +41,11 @@ export const DialogWindow = ({
   return (
     <div
       ref={ref}
-      className="dialog-window"
+      className={styles.box}
       style={{ ...originalStyle, ...style }}
     >
-      <div className="dialog-name">{name}</div>
-      <div className="dialog-text">
+      <div className={styles.name}>{name}</div>
+      <div className={styles.text}>
         {displayText}
         <NextIndicator />
       </div>

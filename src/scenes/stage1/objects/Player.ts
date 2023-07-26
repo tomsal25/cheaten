@@ -27,6 +27,9 @@ export class Shooter extends BaseShooter {
     this._isMovable = true;
 
     this._lifeBar = new LifeBar(scene, 0x00ff00, 100);
+
+    this.setDepth(5);
+    this._lifeBar.setDepth(5);
   }
 
   update() {
@@ -96,7 +99,6 @@ export class BulletGroup extends Phaser.Physics.Arcade.Group {
   update() {
     this.children.each(e => e.update());
 
-    // FIXME: on smartphone, moving finger while touching the canvas causes odd player speed
     if (this.player._isMovable && this.scene.input.activePointer.isDown) {
       const { x, y } = this.scene.input.activePointer;
       // return if out of screen

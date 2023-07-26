@@ -23,7 +23,7 @@ import {
   setWaitFlag,
   stepTimeline,
 } from '../../store/Store';
-import { isPositiveInt } from '../../util/Validate';
+import { isPositiveInt } from '../../utils/validator';
 import { getCodeString } from './data/CodeString';
 import { timeline } from './data/Timeline';
 import * as Enemy from './objects/Enemy';

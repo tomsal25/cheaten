@@ -9,8 +9,7 @@ export const GAME_CONFIG: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
 
   scale: {
-    // TODO: set fixed size here and change it with css
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.NONE,
     parent: GAME_ID,
     width: CANVAS_WIDTH,
     height: CANVAS_HEIGHT,
