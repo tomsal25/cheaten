@@ -36,7 +36,7 @@ export const DebugButtons = () => {
     useEffect(() => {
       void (async () => {
         const { default: style } = await import(
-          '../features/dialog/components/Window/Window.module.scss'
+          '../../../../features/dialog/components/Window/Window.module.scss'
         );
         dialog_window = style.box;
       })();
