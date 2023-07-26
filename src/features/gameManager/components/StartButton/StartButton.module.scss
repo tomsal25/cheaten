@@ -1,0 +1,15 @@
+@use '../../../../config/mixin' as mix;
+
+.btn {
+  @include mix.mq(sp) {
+    font-size: 1.5rem;
+  }
+
+  padding: 1em 2em;
+
+  font-size: 2.5rem;
+
+  background: #eeee;
+  border-radius: 2em;
+  box-shadow: 0.2em 0.2em 0 0.1em #ccc;
+}

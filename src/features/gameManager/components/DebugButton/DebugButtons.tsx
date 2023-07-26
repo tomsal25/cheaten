@@ -1,7 +1,7 @@
 import { useStore } from '@nanostores/preact';
 import { useEffect, useState } from 'preact/hooks';
-import { DEBUG_CHECK_ISMOVE, DEBUG_g_isMove } from '../config/Debug';
-import { g_currentScreen, g_flag, g_isPlaying } from '../store/Store';
+import { DEBUG_CHECK_ISMOVE, DEBUG_g_isMove } from '../../../../config/Debug';
+import { g_currentScreen, g_flag, g_isPlaying } from '../../../../store/Store';
 
 export const DebugButtons = () => {
   const Flag = () => {
@@ -36,7 +36,7 @@ export const DebugButtons = () => {
     useEffect(() => {
       void (async () => {
         const { default: style } = await import(
-          '../features/dialog/components/Window/Window.module.scss'
+          '../../../../features/dialog/components/Window/Window.module.scss'
         );
         dialog_window = style.box;
       })();
