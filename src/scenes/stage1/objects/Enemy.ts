@@ -23,6 +23,10 @@ export class Shooter extends BaseShooter {
     );
 
     this._lifeBar = new LifeBar(scene, 0x00ff00, 100);
+
+    // TODO: use container instead of changing each object's depth
+    this.setDepth(5);
+    this._lifeBar.setDepth(5);
   }
 
   update() {

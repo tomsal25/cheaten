@@ -27,6 +27,9 @@ export class Shooter extends BaseShooter {
     this._isMovable = true;
 
     this._lifeBar = new LifeBar(scene, 0x00ff00, 100);
+
+    this.setDepth(5);
+    this._lifeBar.setDepth(5);
   }
 
   update() {
