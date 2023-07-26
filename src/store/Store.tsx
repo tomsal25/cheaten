@@ -1,7 +1,7 @@
 import { atom } from 'nanostores';
-import { InputInfo } from '../components/CustomInput';
 import { DEBUG_LOG_TIMELINE, DEBUG_VALIDATE_FLAG } from '../config/Debug';
 import * as SCENE_KEY from '../config/SceneKeyStore';
+import { InputInfo } from '../features/editor/components/CustomInput/CustomInput';
 
 // TODO: remove these
 export const g_count = atom(0);

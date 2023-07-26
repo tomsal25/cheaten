@@ -1,7 +1,7 @@
 import { ReadableAtom } from 'nanostores';
 import { JSX, memo, useEffect } from 'preact/compat';
-import { g_componentInfoList } from '../store/Store';
-import { CustomInput, InputInfo } from './CustomInput';
+import { g_componentInfoList } from '../../../../store/Store';
+import { CustomInput, InputInfo } from '../CustomInput/CustomInput';
 
 const REGEXP_REPLACE = /(\/\*@.*@\*\/)/;
 const REGEXP_NEW_LINE = /(\n)/;
@@ -29,12 +29,13 @@ const parseManager = (
     : str;
 };
 
+const newLineParser = (str: string | JSX.Element) =>
+  parseManager(str, REGEXP_NEW_LINE, () => <br />);
+
 const parsedComponent = (str: string, className: string) => {
   return <span className={className}>{newLineParser(str)}</span>;
 };
 
-const newLineParser = (str: string | JSX.Element) =>
-  parseManager(str, REGEXP_NEW_LINE, () => <br />);
 const commentParser = (str: string) => parsedComponent(str, 'c');
 const regexpParser = (str: string) => parsedComponent(str, 'r');
 // FIXME: fail if strings include comment token (// ..., /* ... */).
@@ -77,6 +78,7 @@ const parser = (
 
     return <></>;
   };
+
   return [
     [codeString]
       .flatMap(s => parseManager(s, REGEXP_REPLACE, replaceParser))

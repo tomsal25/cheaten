@@ -1,6 +1,5 @@
 import { useStore } from '@nanostores/preact';
 import { WritableAtom } from 'nanostores';
-
 import { useEffect, useRef } from 'preact/hooks';
 import {
   g_codeString,
@@ -10,9 +9,9 @@ import {
   g_isInputEnabled,
   g_isSubmitted,
   g_targetScrollPos,
-} from '../store/Store';
-import './CodeEditor.css';
-import { CodeParser } from './CodeParser';
+} from '../../../../store/Store';
+import { CodeParser } from '../Parser/CodeParser';
+import styles from './Editor.module.scss';
 
 const SubmitButton = ({ isEnabled }: { isEnabled: WritableAtom<boolean> }) => {
   const flag = useStore(isEnabled);
@@ -49,19 +48,19 @@ export const Editor = ({ zIndex }: { zIndex: number }) => {
 
   return (
     <div
-      className="code-container"
+      className={styles.box}
       style={{
         zIndex,
         transform: `${isSelectEditor ? '' : 'scale(0)'}`,
         transition: `transform ${isSelectEditor ? '1s' : '.5s'} ease`,
       }}
     >
-      <div className="code-wrapper">
+      <div className={styles.wrapper}>
         {/* TODO: consider using position:sticky */}
         <SubmitButton isEnabled={g_isInputEnabled} />
         <div
           ref={ref}
-          className="code-editor"
+          className={styles.editor}
           style={{ userSelect: isSelectEditor ? 'text' : 'none' }}
         >
           <CodeParser codeString={codeString} isEnabled={g_isInputEnabled} />

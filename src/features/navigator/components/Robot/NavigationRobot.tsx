@@ -1,6 +1,5 @@
 import { CSSProperties } from 'preact/compat';
-
-import './NavigationRobot.css';
+import styles from './NavigationRobot.module.scss';
 
 const width = 40;
 const height = 40;
@@ -16,7 +15,7 @@ export const NavigationRobot = ({
 }) => {
   return (
     <div
-      className="navi-box"
+      className={styles.box}
       style={{
         transform:
           top && left
@@ -27,7 +26,7 @@ export const NavigationRobot = ({
         ...style,
       }}
     >
-      <div className="navi-robot" />
+      <div className={styles.robot} />
     </div>
   );
 };
