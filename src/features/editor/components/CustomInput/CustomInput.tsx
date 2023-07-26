@@ -1,6 +1,7 @@
 import { useStore } from '@nanostores/preact';
 import { ReadableAtom } from 'nanostores';
 import { useEffect, useRef } from 'preact/hooks';
+import styles from './CustomInput.module.scss';
 
 export interface InputInfo {
   getValue: () => string;
@@ -32,6 +33,7 @@ export const CustomInput = ({
 
   return (
     <input
+      className={styles.input}
       ref={ref}
       type="text"
       disabled={isDisabled}

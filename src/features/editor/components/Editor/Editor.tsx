@@ -9,9 +9,9 @@ import {
   g_isInputEnabled,
   g_isSubmitted,
   g_targetScrollPos,
-} from '../store/Store';
-import styles from './CodeEditor.module.scss';
-import { CodeParser } from './CodeParser';
+} from '../../../../store/Store';
+import { CodeParser } from '../Parser/CodeParser';
+import styles from './Editor.module.scss';
 
 const SubmitButton = ({ isEnabled }: { isEnabled: WritableAtom<boolean> }) => {
   const flag = useStore(isEnabled);

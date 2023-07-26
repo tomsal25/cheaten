@@ -35,25 +35,9 @@
   }
 
   code,
-  code span,
-  code input {
+  code span {
     font-size: 16px;
     user-select: inherit;
-  }
-
-  code input {
-    width: 4em;
-    margin: 0 2px;
-    border: 1.5px dotted #ffffff80;
-    appearance: none;
-    background: none;
-    outline: none;
-  }
-
-  code input:disabled {
-    color: #ffffff90;
-    background: #c5d0bda6;
-    cursor: not-allowed;
   }
 
   // parsed elements
