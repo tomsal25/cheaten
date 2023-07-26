@@ -15,14 +15,15 @@
   /* user-select: none; */
 }
 
-body {
-  margin: 0;
-  max-height: 100vh;
-  display: flex;
-  place-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
+// #app {
+//   text-align: center;
+//   height: 100vh;
+//   width: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+// }
 
 button {
   border-radius: 8px;
@@ -35,11 +36,13 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
   user-select: none;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
+  &:hover {
+    border-color: #646cff;
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+  }
 }

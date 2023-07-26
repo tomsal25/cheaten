@@ -1,8 +1,8 @@
 import { CSSProperties } from 'preact/compat';
 import { Ref, useEffect, useRef, useState } from 'preact/hooks';
-import './DialogWindow.css';
+import styles from './DialogWindow.module.scss';
 
-const NextIndicator = () => <span className="dialog-next">▼</span>;
+const NextIndicator = () => <span className={styles.next}>▼</span>;
 
 const useClickText = (
   text: readonly string[],
@@ -62,11 +62,11 @@ export const DialogWindow = ({
   return (
     <div
       ref={ref}
-      className="dialog-window"
+      className={styles.box}
       style={{ ...originalStyle, ...style }}
     >
-      <div className="dialog-name">{name}</div>
-      <div className="dialog-text">
+      <div className={styles.name}>{name}</div>
+      <div className={styles.text}>
         {displayText}
         <NextIndicator />
       </div>

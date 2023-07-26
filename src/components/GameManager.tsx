@@ -1,7 +1,6 @@
+import { useStore } from '@nanostores/preact';
 import Phaser from 'phaser';
 import { useEffect, useState } from 'preact/hooks';
-
-import { useStore } from '@nanostores/preact';
 import { GAME_CONFIG, GAME_ID } from '../config/Consts';
 import {
   DEBUG_ASSIGN_GAME_AS_GLOBAL,
@@ -22,9 +21,8 @@ import {
 } from '../store/Store';
 import { Editor } from './CodeEditor';
 import { DialogWindow } from './DialogWindow';
+import styles from './GameManager.module.scss';
 import { NavigationRobot } from './NavigationRobot';
-
-import './GameManager.css';
 
 const _checkMove = () => {
   const isMove = useStore(DEBUG_g_isMove);
@@ -184,8 +182,8 @@ const GameCanvas = ({ zIndex }: { zIndex: number }) => {
   }, []);
 
   return (
-    <div className="canvas-wrapper" style={{ zIndex }}>
-      <div id={GAME_ID} style={{ display: 'grid', placeItems: 'center' }}>
+    <div className={styles.canvas_wrapper} style={{ zIndex }}>
+      <div id={GAME_ID} className={styles.canvas_parent}>
         {/* canvas will be inserted here */}
       </div>
     </div>
@@ -199,7 +197,7 @@ export const GameManager = () => {
 
   return (
     <>
-      <div className="game-container">
+      <div className={styles.box}>
         <Editor zIndex={1} />
         <Navigator zIndex={9} />
         <Dialog zIndex={5} />

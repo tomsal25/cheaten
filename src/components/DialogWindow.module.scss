@@ -1,4 +1,4 @@
-.dialog-window {
+.box {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -18,14 +18,14 @@
   user-select: none;
 }
 
-.dialog-name {
+.name {
   width: fit-content;
   padding: 2px;
   border: thin solid white;
   color: white;
 }
 
-.dialog-text {
+.text {
   flex: 1;
   width: 100%;
   /* border: thin solid white; */
@@ -34,7 +34,7 @@
   word-wrap: break-word;
 }
 
-.dialog-next {
+.next {
   margin-left: 3px;
   /* blueviolet */
   background: #8a2be2;
