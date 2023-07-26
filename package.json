@@ -14,7 +14,7 @@
     "npm": ">=9.0.0"
   },
   "dependencies": {
-    "@nanostores/preact": "^0.3.1",
+    "@nanostores/preact": "^0.5.0",
     "nanostores": "^0.9.3",
     "phaser": "^3.55.2",
     "preact": "^10.13.0"
@@ -28,6 +28,9 @@
     "eslint-config-prettier": "^8.8.0",
     "prettier": "^2.8.7",
     "sass": "^1.64.1",
+    "stylelint": "^15.10.2",
+    "stylelint-config-clean-order": "^5.0.1",
+    "stylelint-config-standard-scss": "^10.0.0",
     "typescript": "^5.0.4",
     "vite": "^4.2.1"
   }

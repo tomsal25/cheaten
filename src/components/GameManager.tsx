@@ -58,8 +58,8 @@ const GameCanvas = ({ zIndex }: { zIndex: number }) => {
   }, []);
 
   return (
-    <div className={styles.canvas_wrapper} style={{ zIndex }}>
-      <div id={GAME_ID} className={styles.canvas_parent}>
+    <div className={styles.canvaswrapper} style={{ zIndex }}>
+      <div id={GAME_ID} className={styles.canvasparent}>
         {/* canvas will be inserted here */}
       </div>
     </div>

@@ -1,17 +1,19 @@
 :root {
   font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN',
     'Hiragino Sans', Meiryo, sans-serif;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  text-size-adjust: 100%;
+  text-rendering: optimizelegibility;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+  font-synthesis: none;
 }
 
 * {
-  padding: 0;
-  margin: 0;
   touch-action: pan-x pan-y;
+  margin: 0;
+  padding: 0;
+
   /* user-select: none; */
 }
 
@@ -26,16 +28,20 @@
 // }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+
   padding: 0.6em 1.2em;
+
+  font-family: inherit;
   font-size: 1em;
   font-weight: 500;
-  font-family: inherit;
+
   background: #ddc7c7;
-  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 8px;
+
   transition: border-color 0.25s;
-  user-select: none;
 
   &:hover {
     border-color: #646cff;
