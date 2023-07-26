@@ -1,20 +1,20 @@
 import Phaser from 'phaser';
 import { useEffect } from 'preact/hooks';
-import { GAME_CONFIG, GAME_ID } from '../config/Consts';
+import { GAME_CONFIG, GAME_ID } from '../../../../config/Consts';
 import {
   DEBUG_ASSIGN_GAME_AS_GLOBAL,
   DEBUG_LOG_CURRENT_SCENE,
-} from '../config/Debug';
-import { Dialog } from '../features/dialog/components/Dialog/Dialog';
-import { Editor } from '../features/editor/components/Editor/Editor';
-import { Navigator } from '../features/navigator/components/Navigator/Navigator';
-import { sceneList } from '../scenes';
+} from '../../../../config/Debug';
+import { sceneList } from '../../../../scenes';
 import {
   g_currentSceneKey,
   g_currentScreen,
   g_isPlaying,
-} from '../store/Store';
-import { DebugButtons } from './DebugButtons';
+} from '../../../../store/Store';
+import { Dialog } from '../../../dialog/components/Dialog/Dialog';
+import { Editor } from '../../../editor/components/Editor/Editor';
+import { Navigator } from '../../../navigator/components/Navigator/Navigator';
+import { DebugButtons } from '../DebugButton/DebugButtons';
 import styles from './GameManager.module.scss';
 
 const GameCanvas = ({ zIndex }: { zIndex: number }) => {

@@ -1,7 +1,7 @@
 import { useState } from 'preact/hooks';
 import './app.scss';
-import { GameManager } from './components/GameManager';
 import { DEBUG_SKIP_WELCOME_SCREEN } from './config/Debug';
+import { GameManager } from './features/gameManager/components/GameManager/GameManager';
 
 const StartButton = ({ setStart }: { setStart: () => void }) => {
   return (
