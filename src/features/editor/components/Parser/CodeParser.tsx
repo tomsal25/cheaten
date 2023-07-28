@@ -1,5 +1,5 @@
 import { ReadableAtom } from 'nanostores';
-import { JSX, memo, useEffect } from 'preact/compat';
+import { JSX, useEffect } from 'preact/compat';
 import { g_componentInfoList } from '../../../../store/Store';
 import { CustomInput, InputInfo } from '../CustomInput/CustomInput';
 
@@ -94,24 +94,22 @@ const parser = (
 };
 
 // TODO: is it better to use memo?
-export const CodeParser = memo(
-  ({
-    codeString,
-    isEnabled,
-  }: {
-    codeString: string;
-    isEnabled: ReadableAtom<boolean>;
-  }) => {
-    const [code, componentInfoList] = parser(codeString, isEnabled);
+export const CodeParser = ({
+  codeString,
+  isEnabled,
+}: {
+  codeString: string;
+  isEnabled: ReadableAtom<boolean>;
+}) => {
+  const [code, componentInfoList] = parser(codeString, isEnabled);
 
-    useEffect(() => {
-      g_componentInfoList.set(componentInfoList);
-    }, [componentInfoList]);
+  useEffect(() => {
+    g_componentInfoList.set(componentInfoList);
+  }, [componentInfoList]);
 
-    return (
-      <pre>
-        <code>{code}</code>
-      </pre>
-    );
-  }
-);
+  return (
+    <pre>
+      <code>{code}</code>
+    </pre>
+  );
+};

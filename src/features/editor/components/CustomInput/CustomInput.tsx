@@ -21,8 +21,11 @@ export const CustomInput = ({
 }) => {
   const ref = useRef<HTMLInputElement>(null);
   const isDisabled = !useStore(isEnabled);
+  console.log('parse', infoSetter, initText);
 
   useEffect(() => {
+    console.log('ueparse', infoSetter);
+
     infoSetter({
       getValue: () => ref.current?.value ?? '',
       getDomRect: () => ref.current?.getBoundingClientRect() ?? new DOMRect(),
