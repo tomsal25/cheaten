@@ -1,6 +1,6 @@
 import { useStore } from '@nanostores/preact';
 import { ReadableAtom } from 'nanostores';
-import { useEffect, useRef } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import styles from './CustomInput.module.scss';
 
 export interface InputInfo {
@@ -19,13 +19,15 @@ export const CustomInput = ({
   isEnabled: ReadableAtom<boolean>;
   initText?: string;
 }) => {
+  const [value, setValue] = useState('');
   const ref = useRef<HTMLInputElement>(null);
   const isDisabled = !useStore(isEnabled);
-  console.log('parse', infoSetter, initText);
 
   useEffect(() => {
-    console.log('ueparse', infoSetter);
+    setValue(initText ?? '');
+  }, [initText]);
 
+  useEffect(() => {
     infoSetter({
       getValue: () => ref.current?.value ?? '',
       getDomRect: () => ref.current?.getBoundingClientRect() ?? new DOMRect(),
@@ -41,7 +43,7 @@ export const CustomInput = ({
       type="text"
       disabled={isDisabled}
       defaultValue={initText}
-      value={initText}
+      value={value}
     />
   );
 };
