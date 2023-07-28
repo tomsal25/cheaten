@@ -33,18 +33,18 @@ export class Home extends Phaser.Scene {
             .catch(null);
         },
       ],
-      // [
-      //   '2',
-      //   'op',
-      //   () => {
-      //     import('../stage2/Stage2')
-      //       .then(e => {
-      //         this.game.scene.add(SCENE_KEY.STAGE2, e.default);
-      //         this.scene.start(SCENE_KEY.STAGE2);
-      //       })
-      //       .catch(null);
-      //   },
-      // ],
+      [
+        '2',
+        '変数',
+        () => {
+          import('../stage2/Stage2')
+            .then(e => {
+              this.game.scene.add(SCENE_KEY.STAGE2, e.default);
+              this.scene.start(SCENE_KEY.STAGE2);
+            })
+            .catch(null);
+        },
+      ],
     ];
     const element = sceneDataList.length;
 
