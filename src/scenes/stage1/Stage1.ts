@@ -86,6 +86,7 @@ export default class Stage1 extends Phaser.Scene {
     this.pauseMovement();
 
     g_codeString.set(getCodeString());
+    g_targetScrollPos.set([0, 0]);
 
     setTimelineList(timeline);
     g_currentSceneKey.set(SCENE_KEY.STAGE1);
