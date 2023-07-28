@@ -1,11 +1,10 @@
 import Phaser from 'phaser';
-
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from '../../config/Consts';
 import * as IMAGE_KEY from '../../config/ImageKeyStore';
 import * as SCENE_KEY from '../../config/SceneKeyStore';
 import { g_currentSceneKey } from '../../store/Store';
 
-export class Stage2 extends Phaser.Scene {
+export default class Stage2 extends Phaser.Scene {
   private player!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private bullets!: Phaser.Physics.Arcade.Group;

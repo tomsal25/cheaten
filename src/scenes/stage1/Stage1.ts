@@ -29,7 +29,7 @@ import { timeline } from './data/Timeline';
 import * as Enemy from './objects/Enemy';
 import * as Player from './objects/Player';
 
-export class Stage1 extends Phaser.Scene {
+export default class Stage1 extends Phaser.Scene {
   private flag = 1;
   private isMove = true;
 
@@ -226,6 +226,12 @@ export class Stage1 extends Phaser.Scene {
       this.removeAttackEvent();
       this.clearText.setText('STAGE CLEAR!!!');
       setWaitFlag();
+      this.time.addEvent({
+        delay: 6000,
+        callback: () => {
+          this.scene.start(SCENE_KEY.HOME);
+        },
+      });
     }
   }
 

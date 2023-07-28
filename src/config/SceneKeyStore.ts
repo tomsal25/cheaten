@@ -1,4 +1,5 @@
 export const TITLE = 's0';
+export const HOME = 's_';
 export const STAGE1 = 's1';
 export const STAGE2 = 's2';
 export const EX = 's00';

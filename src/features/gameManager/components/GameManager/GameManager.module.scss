@@ -3,13 +3,15 @@
 .box {
   @include mix.mq(sp) {
     width: 95vw;
+    height: 80vh;
+    margin: 10vh auto;
   }
 
   position: relative;
 
   width: 80vw;
-  height: 80vh;
-  margin: 10vh auto;
+  height: 90vh;
+  margin: 5vh auto;
 
   background: gray; /* background: url('/src/assets/image/favicon.svg') blueviolet 0/20%; */
 }
