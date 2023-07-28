@@ -29,7 +29,7 @@ import { timeline } from './data/Timeline';
 import * as Enemy from './objects/Enemy';
 import * as Player from './objects/Player';
 
-export class Stage1 extends Phaser.Scene {
+export default class Stage1 extends Phaser.Scene {
   private flag = 1;
   private isMove = true;
 
@@ -189,7 +189,7 @@ export class Stage1 extends Phaser.Scene {
         this.resetScreen();
         this.setEnemyAttack();
         this.player.setNewLife(Number.isFinite(num) && num < 1e4 ? num : 1e4);
-        this.enemy.setNewLife(15000);
+        this.enemy.setNewLife(1500);
         this.stepFlag(9);
       }
     }
@@ -226,6 +226,22 @@ export class Stage1 extends Phaser.Scene {
       this.removeAttackEvent();
       this.clearText.setText('STAGE CLEAR!!!');
       setWaitFlag();
+
+      // move to home screen with fade out
+      this.time.addEvent({
+        delay: 6000,
+        callback: () => {
+          this.cameras.main.fadeOut(1000, 0, 0, 0, (_: unknown, n: number) => {
+            if (n == 1) {
+              this.scene.start(SCENE_KEY.HOME);
+              // remove this scene after some seconds
+              setTimeout(() => {
+                this.scene.remove(this);
+              }, 100);
+            }
+          });
+        },
+      });
     }
   }
 

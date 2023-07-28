@@ -45,14 +45,22 @@ export class Title extends Phaser.Scene {
         this.isStarted = true;
         this.cameras.main.fadeOut(1000, 0, 0, 0);
         this.time.delayedCall(1500, () => {
-          if (this.game.scene.getIndex(SCENE_KEY.STAGE1) < 0) {
-            import('./stage1/Stage1')
-              .then(e => {
-                this.game.scene.add(SCENE_KEY.STAGE1, e.Stage1);
-                this.scene.start(SCENE_KEY.STAGE1);
-              })
-              .catch(null);
-          } else this.scene.start(SCENE_KEY.STAGE1);
+          import('./home/Home')
+            .then(e => {
+              this.game.scene.add(SCENE_KEY.HOME, e.Home);
+            })
+            .catch(null);
+          import('./stage1/Stage1')
+            .then(e => {
+              this.game.scene.add(SCENE_KEY.STAGE1, e.default);
+              this.scene.start(SCENE_KEY.STAGE1);
+
+              // remove this scene after some seconds
+              setTimeout(() => {
+                this.scene.remove(this);
+              }, 100);
+            })
+            .catch(null);
         });
       });
 
@@ -62,10 +70,21 @@ export class Title extends Phaser.Scene {
     });
 
     if (DEBUG_SKIP_TITLE_SCENE) {
+      import('./home/Home')
+        .then(e => {
+          this.game.scene.add(SCENE_KEY.HOME, e.Home);
+          // this.scene.start(SCENE_KEY.HOME);
+        })
+        .catch(null);
       import('./stage1/Stage1')
         .then(e => {
-          this.game.scene.add(SCENE_KEY.STAGE1, e.Stage1);
+          this.game.scene.add(SCENE_KEY.STAGE1, e.default);
           this.scene.start(SCENE_KEY.STAGE1);
+
+          // remove this scene after some seconds
+          setTimeout(() => {
+            this.scene.remove(this);
+          }, 100);
         })
         .catch(null);
     }
