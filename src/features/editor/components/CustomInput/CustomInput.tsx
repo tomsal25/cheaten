@@ -41,6 +41,7 @@ export const CustomInput = ({
       type="text"
       disabled={isDisabled}
       defaultValue={initText}
+      value={initText}
     />
   );
 };
