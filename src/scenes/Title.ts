@@ -54,6 +54,11 @@ export class Title extends Phaser.Scene {
             .then(e => {
               this.game.scene.add(SCENE_KEY.STAGE1, e.default);
               this.scene.start(SCENE_KEY.STAGE1);
+
+              // remove this scene after some seconds
+              setTimeout(() => {
+                this.scene.remove(this);
+              }, 100);
             })
             .catch(null);
         });
@@ -75,6 +80,11 @@ export class Title extends Phaser.Scene {
         .then(e => {
           this.game.scene.add(SCENE_KEY.STAGE1, e.default);
           this.scene.start(SCENE_KEY.STAGE1);
+
+          // remove this scene after some seconds
+          setTimeout(() => {
+            this.scene.remove(this);
+          }, 100);
         })
         .catch(null);
     }

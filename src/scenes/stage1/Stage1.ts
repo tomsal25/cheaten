@@ -226,10 +226,20 @@ export default class Stage1 extends Phaser.Scene {
       this.removeAttackEvent();
       this.clearText.setText('STAGE CLEAR!!!');
       setWaitFlag();
+
+      // move to home screen with fade out
       this.time.addEvent({
         delay: 6000,
         callback: () => {
-          this.scene.start(SCENE_KEY.HOME);
+          this.cameras.main.fadeOut(1000, 0, 0, 0, (_: unknown, n: number) => {
+            if (n == 1) {
+              this.scene.start(SCENE_KEY.HOME);
+              // remove this scene after some seconds
+              setTimeout(() => {
+                this.scene.remove(this);
+              }, 100);
+            }
+          });
         },
       });
     }
