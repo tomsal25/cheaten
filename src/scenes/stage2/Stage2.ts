@@ -86,7 +86,6 @@ export default class Stage2 extends Phaser.Scene {
     this.pauseMovement();
 
     g_codeString.set(getCodeString());
-    g_targetScrollPos.set([0, 0]);
 
     setTimelineList(timeline);
     g_currentSceneKey.set(SCENE_KEY.STAGE2);
@@ -176,8 +175,6 @@ export default class Stage2 extends Phaser.Scene {
         this.resetScreen();
         this.setEnemyAttack();
         this.enemy.setNewLife(Number.isFinite(num) && num < 1e6 ? num : 1e6);
-        console.log(num);
-
         this.player.setNewLife(1000);
         this.stepFlag(7);
       }
@@ -231,6 +228,8 @@ export default class Stage2 extends Phaser.Scene {
               this.scene.start(SCENE_KEY.HOME);
               // remove this scene after some seconds
               setTimeout(() => {
+                this.preRemove();
+
                 this.scene.remove(this);
               }, 100);
             }
@@ -307,5 +306,12 @@ export default class Stage2 extends Phaser.Scene {
   private stepFlag(flag: number) {
     this.flag = flag;
     setGlobalFlag(flag);
+  }
+
+  private preRemove() {
+    // reset global state
+    g_codeString.set('');
+    g_targetScrollPos.set([0, 0]);
+    setGlobalFlag(1);
   }
 }
