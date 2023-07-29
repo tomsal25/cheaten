@@ -111,7 +111,12 @@ export class BulletGroup extends Phaser.Physics.Arcade.Group {
   private fireBullet(count = 1) {
     for (let i = 0; i < count; i++) {
       if (this.isFull()) return;
-      (this.get(this.player.x, this.player.y) as Bullet)
+      (
+        this.get(
+          this.player.x - this.player.displayWidth / 2 + this.hitWidth / 2,
+          this.player.y - this.player.displayHeight
+        ) as Bullet
+      )
         .setVelocityY(-300)
         .setBodySize(this.hitWidth, this.hitHeight)
         .refreshBody()
