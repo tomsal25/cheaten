@@ -42,8 +42,8 @@ export const CustomInput = ({
       ref={ref}
       type="text"
       disabled={isDisabled}
-      defaultValue={initText}
       value={value}
+      onInput={e => setValue(e.currentTarget.value)}
     />
   );
 };
